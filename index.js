@@ -9,6 +9,6 @@ module.exports = suchibot;
 
 if (module === require.main) {
   runtime.cache[__filename] = module;
-  suchibot.startListening();
-  runtime.load(path.join(__dirname, "src", "cli.ts"));
+  const { main } = runtime.load(path.join(__dirname, "src", "cli.ts"));
+  main(suchibot);
 }
