@@ -15,9 +15,9 @@ Write your macro script in either JavaScript or TypeScript; for example:
 ```ts
 import { Keyboard, Mouse, Key, MouseButton, sleep } from "suchibot";
 
-Keyboard.onDown(Key.NUMPAD_0, () => {
+Keyboard.onDown(Key.NUMPAD_0, async () => {
   Mouse.click(MouseButton.LEFT);
-  sleep(100);
+  await sleep(100);
   Keyboard.tap(Key.NINE);
 });
 ```
@@ -120,8 +120,13 @@ const { width, height } = Screen.getSize();
 console.log(Screen);
 // { getSize: [Function: getSize] }
 
-// `sleep` blocks the main thread for the specified number of milliseconds. eg:
-sleep(100);
+// `sleep` returns a Promise that resolves in the specified number of milliseconds. eg:
+sleep(100).then(() => {
+  console.log("hi");
+});
+
+// `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
+sleepSync(100);
 ```
 
 ## Full API Documentation
