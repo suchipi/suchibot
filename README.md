@@ -5,7 +5,8 @@ A cross-platform AutoHotKey-like thing with JavaScript/TypeScript as its scripti
 ## Installation
 
 ```
-npm install -g suchibot
+# cd to a folder where you want to keep your scripts, then:
+$ npm install suchibot
 ```
 
 ## Usage (CLI)
@@ -25,7 +26,7 @@ Keyboard.onDown(Key.NUMPAD_0, async () => {
 Run `suchibot` with the path to your script:
 
 ```
-$ suchibot ./myscript.js
+$ npx suchibot ./myscript.js
 ```
 
 It's recommended to use Visual Studio Code to write your script, as it will give you autocomplete for the functions and key names (since they have TypeScript types).
