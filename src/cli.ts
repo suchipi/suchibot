@@ -36,7 +36,35 @@ if (!fs.existsSync(modulePath)) {
 try {
   require(modulePath);
 } catch (err) {
-  console.error("An error occurred in your script:");
-  console.error(err);
+  console.error(kleur.red("An error occurred in your script:"));
+
+  let prettyErr = err;
+
+  if (
+    typeof err === "object" &&
+    err != null &&
+    // @ts-ignore
+    typeof err.message === "string" &&
+    // @ts-ignore
+    typeof err.stack === "string"
+  ) {
+    const error = err as Error;
+
+    prettyErr =
+      kleur.red(error.message) +
+      "\n" +
+      (error.stack || "")
+        .split("\n")
+        .map((line) => line.trim())
+        .map((line, index) => {
+          if (index === 0) return null;
+
+          return "  " + kleur.gray(line);
+        })
+        .filter(Boolean)
+        .join("\n");
+  }
+
+  console.error(prettyErr);
   process.exit(1);
 }
