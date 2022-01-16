@@ -613,21 +613,38 @@ List of keys:
 - `SHIFT`
 - `RIGHT_SHIFT`
 - `SPACE`
-- `PRINT_SCREEN`
-- `INSERT`
+- `PRINT_SCREEN` (outputting this key doesn't work in macOS, unfortunately)
+- `INSERT` (outputting this key doesn't work in macOS, unfortunately)
 - `VOLUME_DOWN` (not every keyboard has this)
 - `VOLUME_UP` (not every keyboard has this)
 - `MUTE` (not every keyboard has this)
-- `NUMPAD_0`
-- `NUMPAD_1`
-- `NUMPAD_2`
-- `NUMPAD_3`
-- `NUMPAD_4`
-- `NUMPAD_5`
-- `NUMPAD_6`
-- `NUMPAD_7`
-- `NUMPAD_8`
-- `NUMPAD_9`
+- `NUMPAD_0` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_1` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_2` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_3` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_4` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_5` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_6` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_7` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_8` (outputting this key doesn't work in Linux, unfortunately)
+- `NUMPAD_9` (outputting this key doesn't work in Linux, unfortunately)
+- `CAPS_LOCK` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_MULTIPLY` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_ADD` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_SUBTRACT` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_DECIMAL` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_DIVIDE` (outputting this key doesn't work, unfortunately)
+- `SEMICOLON` (outputting this key doesn't work, unfortunately)
+- `EQUAL` (outputting this key doesn't work, unfortunately)
+- `COMMA` (outputting this key doesn't work, unfortunately)
+- `MINUS` (outputting this key doesn't work, unfortunately)
+- `PERIOD` (outputting this key doesn't work, unfortunately)
+- `SLASH` (outputting this key doesn't work, unfortunately)
+- `BACKTICK` (outputting this key doesn't work, unfortunately)
+- `LEFT_BRACKET` (outputting this key doesn't work, unfortunately)
+- `BACKSLASH` (outputting this key doesn't work, unfortunately)
+- `RIGHT_BRACKET` (outputting this key doesn't work, unfortunately)
+- `QUOTE` (outputting this key doesn't work, unfortunately)
 - `A`
 - `B`
 - `C`

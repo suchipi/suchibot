@@ -61,6 +61,26 @@ export const Key = {
   NUMPAD_8: "NUMPAD_8" as Key,
   NUMPAD_9: "NUMPAD_9" as Key,
 
+  // These ones don't work in RobotJS :(
+  CAPS_LOCK: "CAPS_LOCK" as Key,
+  NUMPAD_MULTIPLY: "NUMPAD_MULTIPLY" as Key,
+  NUMPAD_ADD: "NUMPAD_ADD" as Key,
+  NUMPAD_SUBTRACT: "NUMPAD_SUBTRACT" as Key,
+  NUMPAD_DECIMAL: "NUMPAD_DECIMAL" as Key,
+  NUMPAD_DIVIDE: "NUMPAD_DIVIDE" as Key,
+  SEMICOLON: "SEMICOLON" as Key,
+  EQUAL: "EQUAL" as Key,
+  COMMA: "COMMA" as Key,
+  MINUS: "MINUS" as Key,
+  PERIOD: "PERIOD" as Key,
+  SLASH: "SLASH" as Key,
+  BACKTICK: "BACKTICK" as Key,
+  LEFT_BRACKET: "LEFT_BRACKET" as Key,
+  BACKSLASH: "BACKSLASH" as Key,
+  RIGHT_BRACKET: "RIGHT_BRACKET" as Key,
+  QUOTE: "QUOTE" as Key,
+  // end ones that don't work in RobotJS
+
   A: "A" as Key,
   B: "B" as Key,
   C: "C" as Key,

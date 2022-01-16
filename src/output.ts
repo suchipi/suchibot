@@ -103,6 +103,25 @@ const keyToRobotMap: { [key in keyof typeof Key]: string } = {
   NINE: "9",
 
   ANY: "any",
+
+  // These don't work in RobotJS :(
+  CAPS_LOCK: "unsupported",
+  NUMPAD_MULTIPLY: "unsupported",
+  NUMPAD_ADD: "unsupported",
+  NUMPAD_SUBTRACT: "unsupported",
+  NUMPAD_DECIMAL: "unsupported",
+  NUMPAD_DIVIDE: "unsupported",
+  SEMICOLON: "unsupported",
+  EQUAL: "unsupported",
+  COMMA: "unsupported",
+  MINUS: "unsupported",
+  PERIOD: "unsupported",
+  SLASH: "unsupported",
+  BACKTICK: "unsupported",
+  LEFT_BRACKET: "unsupported",
+  BACKSLASH: "unsupported",
+  RIGHT_BRACKET: "unsupported",
+  QUOTE: "unsupported",
 };
 
 const modifierKeyToRobotMap: { [key in keyof typeof ModifierKey]: string } = {
@@ -164,6 +183,11 @@ function keyToRobot(key: Key): string {
   }
 
   const result = keyToRobotMap[key];
+
+  if (result === "unsupported") {
+    throw new Error("Sorry, outputting ${key} isn't supported yet :(");
+  }
+
   if (!result) {
     throw new Error("Invalid key: " + key);
   }
