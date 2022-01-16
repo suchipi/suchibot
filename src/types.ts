@@ -39,7 +39,6 @@ export const Key = {
   F22: "F22" as Key,
   F23: "F23" as Key,
   F24: "F24" as Key,
-  COMMAND: "COMMAND" as Key,
   ALT: "ALT" as Key,
   CONTROL: "CONTROL" as Key,
   SHIFT: "SHIFT" as Key,
@@ -61,13 +60,13 @@ export const Key = {
   NUMPAD_8: "NUMPAD_8" as Key,
   NUMPAD_9: "NUMPAD_9" as Key,
 
-  // These ones don't work in RobotJS :(
   CAPS_LOCK: "CAPS_LOCK" as Key,
   NUMPAD_MULTIPLY: "NUMPAD_MULTIPLY" as Key,
   NUMPAD_ADD: "NUMPAD_ADD" as Key,
   NUMPAD_SUBTRACT: "NUMPAD_SUBTRACT" as Key,
   NUMPAD_DECIMAL: "NUMPAD_DECIMAL" as Key,
   NUMPAD_DIVIDE: "NUMPAD_DIVIDE" as Key,
+  NUMPAD_ENTER: "NUMPAD_ENTER" as Key,
   SEMICOLON: "SEMICOLON" as Key,
   EQUAL: "EQUAL" as Key,
   COMMA: "COMMA" as Key,
@@ -79,7 +78,6 @@ export const Key = {
   BACKSLASH: "BACKSLASH" as Key,
   RIGHT_BRACKET: "RIGHT_BRACKET" as Key,
   QUOTE: "QUOTE" as Key,
-  // end ones that don't work in RobotJS
 
   A: "A" as Key,
   B: "B" as Key,
@@ -120,6 +118,17 @@ export const Key = {
   NINE: "NINE" as Key,
 
   ANY: "ANY" as Key,
+
+  SCROLL_LOCK: "SCROLL_LOCK" as Key,
+  PAUSE_BREAK: "PAUSE_BREAK" as Key,
+  NUM_LOCK: "NUM_LOCK" as Key,
+
+  WINDOWS: "SUPER" as Key,
+  COMMAND: "SUPER" as Key,
+  META: "SUPER" as Key,
+  SUPER: "SUPER" as Key,
+
+  CALCULATOR: "CALCULATOR" as Key,
 };
 
 export type ModifierKey = string & { __type__: "ModifierKey" };

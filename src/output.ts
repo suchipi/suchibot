@@ -42,7 +42,6 @@ const keyToRobotMap: { [key in keyof typeof Key]: string } = {
   F22: "f22",
   F23: "f23",
   F24: "f24",
-  COMMAND: "command",
   ALT: "alt",
   CONTROL: "control",
   SHIFT: "shift",
@@ -104,24 +103,37 @@ const keyToRobotMap: { [key in keyof typeof Key]: string } = {
 
   ANY: "any",
 
-  // These don't work in RobotJS :(
+  // Stuff with "unsupported" doesn't work in RobotJS :(
   CAPS_LOCK: "unsupported",
   NUMPAD_MULTIPLY: "unsupported",
   NUMPAD_ADD: "unsupported",
   NUMPAD_SUBTRACT: "unsupported",
   NUMPAD_DECIMAL: "unsupported",
   NUMPAD_DIVIDE: "unsupported",
+  NUMPAD_ENTER: "unsupported",
   SEMICOLON: "unsupported",
-  EQUAL: "unsupported",
-  COMMA: "unsupported",
-  MINUS: "unsupported",
-  PERIOD: "unsupported",
-  SLASH: "unsupported",
-  BACKTICK: "unsupported",
-  LEFT_BRACKET: "unsupported",
-  BACKSLASH: "unsupported",
-  RIGHT_BRACKET: "unsupported",
-  QUOTE: "unsupported",
+
+  EQUAL: "=",
+  COMMA: ",",
+  MINUS: "-",
+  PERIOD: ".",
+  SLASH: "/",
+  BACKTICK: "`",
+  LEFT_BRACKET: "[",
+  BACKSLASH: "\\",
+  RIGHT_BRACKET: "]",
+  QUOTE: "'",
+
+  SCROLL_LOCK: "unsupported",
+  PAUSE_BREAK: "unsupported",
+  NUM_LOCK: "unsupported",
+
+  COMMAND: "command",
+  WINDOWS: "command",
+  SUPER: "command",
+  META: "command",
+
+  CALCULATOR: "unsupported",
 };
 
 const modifierKeyToRobotMap: { [key in keyof typeof ModifierKey]: string } = {

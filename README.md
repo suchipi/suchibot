@@ -611,6 +611,9 @@ List of keys:
 - `ALT`
 - `CONTROL`
 - `SHIFT`
+- `WINDOWS`
+- `META`
+- `SUPER`
 - `RIGHT_SHIFT`
 - `SPACE`
 - `PRINT_SCREEN` (outputting this key doesn't work in macOS, unfortunately)
@@ -634,17 +637,25 @@ List of keys:
 - `NUMPAD_SUBTRACT` (outputting this key doesn't work, unfortunately)
 - `NUMPAD_DECIMAL` (outputting this key doesn't work, unfortunately)
 - `NUMPAD_DIVIDE` (outputting this key doesn't work, unfortunately)
+- `NUMPAD_ENTER` (outputting this key doesn't work, unfortunately)
 - `SEMICOLON` (outputting this key doesn't work, unfortunately)
-- `EQUAL` (outputting this key doesn't work, unfortunately)
-- `COMMA` (outputting this key doesn't work, unfortunately)
-- `MINUS` (outputting this key doesn't work, unfortunately)
-- `PERIOD` (outputting this key doesn't work, unfortunately)
-- `SLASH` (outputting this key doesn't work, unfortunately)
-- `BACKTICK` (outputting this key doesn't work, unfortunately)
-- `LEFT_BRACKET` (outputting this key doesn't work, unfortunately)
-- `BACKSLASH` (outputting this key doesn't work, unfortunately)
-- `RIGHT_BRACKET` (outputting this key doesn't work, unfortunately)
-- `QUOTE` (outputting this key doesn't work, unfortunately)
+- `EQUAL`
+- `COMMA`
+- `MINUS`
+- `PERIOD`
+- `SLASH`
+- `BACKTICK`
+- `LEFT_BRACKET`
+- `BACKSLASH`
+- `RIGHT_BRACKET`
+- `QUOTE`
+- `SCROLL_LOCK` (outputting this key doesn't work, unfortunately)
+- `PAUSE_BREAK` (outputting this key doesn't work, unfortunately)
+- `NUM_LOCK` (outputting this key doesn't work, unfortunately)
+- `MUTE` (outputting this key doesn't work, unfortunately)
+- `VOLUME_UP` (outputting this key doesn't work, unfortunately)
+- `VOLUME_DOWN` (outputting this key doesn't work, unfortunately)
+- `CALCULATOR` (outputting this key doesn't work, unfortunately)
 - `A`
 - `B`
 - `C`

@@ -111,6 +111,7 @@ const uioToKeyMap = {
   [UiohookKey.NumpadAdd]: Key.NUMPAD_ADD,
   [UiohookKey.NumpadSubtract]: Key.NUMPAD_SUBTRACT,
   [UiohookKey.NumpadDecimal]: Key.NUMPAD_DECIMAL,
+  3612: Key.NUMPAD_ENTER,
   [UiohookKey.NumpadDivide]: Key.NUMPAD_DIVIDE,
   [UiohookKey.F1]: Key.F1,
   [UiohookKey.F2]: Key.F2,
@@ -150,6 +151,24 @@ const uioToKeyMap = {
   [UiohookKey.Ctrl]: Key.CONTROL,
   [UiohookKey.Alt]: Key.ALT,
   [UiohookKey.Shift]: Key.SHIFT,
+
+  70: Key.SCROLL_LOCK,
+  3653: Key.PAUSE_BREAK,
+  14: Key.BACKSPACE,
+  69: Key.NUM_LOCK,
+
+  54: Key.SHIFT, // Right shift
+  3613: Key.CONTROL, // Right control
+  3640: Key.ALT, // Right alt
+
+  3675: Key.SUPER, // Left super
+  3676: Key.SUPER, // Right super
+
+  57376: Key.MUTE,
+  57390: Key.VOLUME_DOWN,
+  57392: Key.VOLUME_UP,
+
+  57377: Key.CALCULATOR,
 };
 
 function uioToKey(uioKey: number): Key | null {
