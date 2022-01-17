@@ -186,7 +186,7 @@ export const Keyboard = {
 
     nut.keyboard.pressKey(nutKey);
     sleepSync(10);
-    nut.keyboard.pressKey(nutKey);
+    nut.keyboard.releaseKey(nutKey);
   },
 
   hold(key: Key) {
