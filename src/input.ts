@@ -1,8 +1,6 @@
-import { Key, ModifierKey, MouseButton } from "./types";
+import { Key, MouseButton } from "./types";
 import { uIOhook, UiohookKey } from "uiohook-napi";
 import mitt, { Emitter } from "mitt";
-
-// TODO modifier keys
 
 // ------------ mouse stuff -------------
 export class MouseEvent {
@@ -148,27 +146,25 @@ const uioToKeyMap = {
   [UiohookKey.Backslash]: Key.BACKSLASH,
   [UiohookKey.BracketRight]: Key.RIGHT_BRACKET,
   [UiohookKey.Quote]: Key.QUOTE,
-  [UiohookKey.Ctrl]: Key.CONTROL,
-  [UiohookKey.Alt]: Key.ALT,
-  [UiohookKey.Shift]: Key.SHIFT,
+  [UiohookKey.Ctrl]: Key.LEFT_CONTROL,
+  [UiohookKey.Alt]: Key.LEFT_ALT,
+  [UiohookKey.Shift]: Key.LEFT_SHIFT,
 
   70: Key.SCROLL_LOCK,
   3653: Key.PAUSE_BREAK,
   14: Key.BACKSPACE,
   69: Key.NUM_LOCK,
 
-  54: Key.SHIFT, // Right shift
-  3613: Key.CONTROL, // Right control
-  3640: Key.ALT, // Right alt
+  54: Key.RIGHT_SHIFT,
+  3613: Key.RIGHT_CONTROL,
+  3640: Key.RIGHT_ALT,
 
-  3675: Key.SUPER, // Left super
-  3676: Key.SUPER, // Right super
+  3675: Key.LEFT_SUPER,
+  3676: Key.RIGHT_SUPER,
 
   57376: Key.MUTE,
   57390: Key.VOLUME_DOWN,
   57392: Key.VOLUME_UP,
-
-  57377: Key.CALCULATOR,
 };
 
 function uioToKey(uioKey: number): Key | null {

@@ -12,9 +12,12 @@ export const Key = {
   RIGHT: "RIGHT" as Key,
   LEFT: "LEFT" as Key,
   HOME: "HOME" as Key,
+  INSERT: "INSERT" as Key,
   END: "END" as Key,
   PAGE_UP: "PAGE_UP" as Key,
   PAGE_DOWN: "PAGE_DOWN" as Key,
+  SPACE: "SPACE" as Key,
+
   F1: "F1" as Key,
   F2: "F2" as Key,
   F3: "F3" as Key,
@@ -39,16 +42,31 @@ export const Key = {
   F22: "F22" as Key,
   F23: "F23" as Key,
   F24: "F24" as Key,
-  ALT: "ALT" as Key,
-  CONTROL: "CONTROL" as Key,
-  SHIFT: "SHIFT" as Key,
+
+  LEFT_ALT: "LEFT_ALT" as Key,
+  LEFT_CONTROL: "LEFT_CONTROL" as Key,
+  LEFT_SHIFT: "LEFT_SHIFT" as Key,
+
+  RIGHT_ALT: "RIGHT_ALT" as Key,
+  RIGHT_CONTROL: "RIGHT_CONTROL" as Key,
   RIGHT_SHIFT: "RIGHT_SHIFT" as Key,
-  SPACE: "SPACE" as Key,
+
+  LEFT_WINDOWS: "LEFT_SUPER" as Key,
+  LEFT_COMMAND: "LEFT_SUPER" as Key,
+  LEFT_META: "LEFT_SUPER" as Key,
+  LEFT_SUPER: "LEFT_SUPER" as Key,
+
+  RIGHT_WINDOWS: "RIGHT_SUPER" as Key,
+  RIGHT_COMMAND: "RIGHT_SUPER" as Key,
+  RIGHT_META: "RIGHT_SUPER" as Key,
+  RIGHT_SUPER: "RIGHT_SUPER" as Key,
+
   PRINT_SCREEN: "PRINT_SCREEN" as Key,
-  INSERT: "INSERT" as Key,
   VOLUME_DOWN: "VOLUME_DOWN" as Key,
   VOLUME_UP: "VOLUME_UP" as Key,
   MUTE: "MUTE" as Key,
+  PAUSE_BREAK: "PAUSE_BREAK" as Key,
+
   NUMPAD_0: "NUMPAD_0" as Key,
   NUMPAD_1: "NUMPAD_1" as Key,
   NUMPAD_2: "NUMPAD_2" as Key,
@@ -59,14 +77,17 @@ export const Key = {
   NUMPAD_7: "NUMPAD_7" as Key,
   NUMPAD_8: "NUMPAD_8" as Key,
   NUMPAD_9: "NUMPAD_9" as Key,
-
-  CAPS_LOCK: "CAPS_LOCK" as Key,
   NUMPAD_MULTIPLY: "NUMPAD_MULTIPLY" as Key,
   NUMPAD_ADD: "NUMPAD_ADD" as Key,
   NUMPAD_SUBTRACT: "NUMPAD_SUBTRACT" as Key,
   NUMPAD_DECIMAL: "NUMPAD_DECIMAL" as Key,
   NUMPAD_DIVIDE: "NUMPAD_DIVIDE" as Key,
   NUMPAD_ENTER: "NUMPAD_ENTER" as Key,
+
+  CAPS_LOCK: "CAPS_LOCK" as Key,
+  NUM_LOCK: "NUM_LOCK" as Key,
+  SCROLL_LOCK: "SCROLL_LOCK" as Key,
+
   SEMICOLON: "SEMICOLON" as Key,
   EQUAL: "EQUAL" as Key,
   COMMA: "COMMA" as Key,
@@ -118,28 +139,6 @@ export const Key = {
   NINE: "NINE" as Key,
 
   ANY: "ANY" as Key,
-
-  SCROLL_LOCK: "SCROLL_LOCK" as Key,
-  PAUSE_BREAK: "PAUSE_BREAK" as Key,
-  NUM_LOCK: "NUM_LOCK" as Key,
-
-  WINDOWS: "SUPER" as Key,
-  COMMAND: "SUPER" as Key,
-  META: "SUPER" as Key,
-  SUPER: "SUPER" as Key,
-
-  CALCULATOR: "CALCULATOR" as Key,
-};
-
-export type ModifierKey = string & { __type__: "ModifierKey" };
-export const ModifierKey = {
-  ALT: "ALT" as ModifierKey,
-  COMMAND: "COMMAND" as ModifierKey,
-  WINDOWS: "WINDOWS" as ModifierKey,
-  SUPER: "SUPER" as ModifierKey,
-  META: "META" as ModifierKey,
-  CONTROL: "CONTROL" as ModifierKey,
-  SHIFT: "SHIFT" as ModifierKey,
 };
 
 export type MouseButton = string & { __type__: "MouseButton" };

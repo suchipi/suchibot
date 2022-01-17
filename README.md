@@ -116,15 +116,13 @@ console.log(Key);
 // }
 
 // `Screen` can give you info about the screen size, eg:
-const { width, height } = Screen.getSize();
+const { width, height } = await Screen.getSize();
 
 console.log(Screen);
 // { getSize: [Function: getSize] }
 
 // `sleep` returns a Promise that resolves in the specified number of milliseconds. eg:
-sleep(100).then(() => {
-  console.log("hi");
-});
+await sleep(100);
 
 // `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
 sleepSync(100);
@@ -397,12 +395,10 @@ Functions that let you control the keyboard and/or register code to be run when 
 
 Presses and then releases the specified key.
 
-You can optionally pass modifier keys to hold while tapping the key.
-
 Definition:
 
 ```ts
-tap(key: Key, modifiers?: ModifierKey | Array<ModifierKey>): void;
+tap(key: Key): void;
 ```
 
 Example:
@@ -410,21 +406,16 @@ Example:
 ```js
 // presses and then releases zero
 Keyboard.tap(Key.ZERO);
-
-// presses and then releases S, while holding Control.
-Keyboard.tap(Key.S, ModifierKey.CONTROL);
 ```
 
 #### Keyboard.hold
 
 Presses down the specified key (and keeps holding it down until you release it, via `Keyboard.release`).
 
-You can optionally pass modifier keys to hold while pressing the key.
-
 Definition:
 
 ```ts
-hold(key: Key, modifiers?: ModifierKey | Array<ModifierKey>): void;
+hold(key: Key): void;
 ```
 
 Example:
@@ -432,21 +423,16 @@ Example:
 ```js
 // presses down zero
 Keyboard.hold(Key.ZERO);
-
-// presses down S, while holding Control.
-Keyboard.hold(Key.S, ModifierKey.CONTROL);
 ```
 
 #### Keyboard.release
 
 Releases (stops holding down) the specified key (which maybe is being held down because you used `Keyboard.hold`).
 
-You can optionally pass modifier keys to hold while releasing the key.
-
 Definition:
 
 ```ts
-release(key: Key, modifiers?: ModifierKey | Array<ModifierKey>): void;
+release(key: Key): void;
 ```
 
 Example:
@@ -454,21 +440,18 @@ Example:
 ```js
 // stops holding down zero
 Keyboard.release(Key.ZERO);
-
-// stops holding down S, while holding Control.
-Keyboard.release(Key.S, ModifierKey.CONTROL);
 ```
 
 #### Keyboard.type
 
 Types the specified string in, by tapping one key at a time, with a delay in-between each key.
 
-Optionally, specify how fast to type by passing the target speed in characters per minute as the second argument to the function.
+Optionally, specify how fast to type by passing the delay in milliseconds between key as the second argument.
 
 Definition:
 
 ```ts
-function type(textToType: string, charactersPerMinute?: number): void;
+function type(textToType: string, delayBetweenKeyPresses: number = 10): void;
 ```
 
 Example:
@@ -479,8 +462,8 @@ Keyboard.type("my-username");
 Keyboard.tap(Keys.TAB);
 Keyboard.type("myP@ssw0rd!");
 
-// type a message really fast:
-Keyboard.type("hihihihihihihi", 9999);
+// type a message really slow:
+Keyboard.type("hihihihihihihi", 200);
 ```
 
 #### Keyboard.onDown
@@ -548,19 +531,19 @@ Functions that give you information about the screen.
 
 #### Screen.getSize
 
-Returns an object with `width` and `height` properties describing the screen resolution in pixels.
+Returns a Promise that resolves to an object with `width` and `height` properties describing the screen resolution in pixels.
 
 Definition:
 
 ```ts
-function getSize(): { width: number; height: number };
+function getSize(): Promise<{ width: number; height: number }>;
 ```
 
 Example:
 
 ```js
 // get the screen resolution
-const { width, height } = Screen.getSize();
+const { width, height } = await Screen.getSize();
 console.log(width, height); // 1920, 1080
 ```
 
@@ -575,14 +558,16 @@ List of keys:
 - `ENTER`
 - `TAB`
 - `ESCAPE`
-- `UP` (arrow key)
-- `DOWN` (arrow key)
-- `RIGHT` (arrow key)
-- `LEFT` (arrow key)
+- `UP`
+- `DOWN`
+- `RIGHT`
+- `LEFT`
 - `HOME`
+- `INSERT`
 - `END`
 - `PAGE_UP`
 - `PAGE_DOWN`
+- `SPACE`
 - `F1`
 - `F2`
 - `F3`
@@ -595,7 +580,7 @@ List of keys:
 - `F10`
 - `F11`
 - `F12`
-- `F13` (f13 through f24 aren't on most keyboards)
+- `F13`
 - `F14`
 - `F15`
 - `F16`
@@ -607,55 +592,55 @@ List of keys:
 - `F22`
 - `F23`
 - `F24`
-- `COMMAND`
-- `ALT`
-- `CONTROL`
-- `SHIFT`
-- `WINDOWS`
-- `META`
-- `SUPER`
+- `LEFT_ALT`
+- `LEFT_CONTROL`
+- `LEFT_SHIFT`
+- `RIGHT_ALT`
+- `RIGHT_CONTROL`
 - `RIGHT_SHIFT`
-- `SPACE`
-- `PRINT_SCREEN` (outputting this key doesn't work in macOS, unfortunately)
-- `INSERT` (outputting this key doesn't work in macOS, unfortunately)
-- `VOLUME_DOWN` (not every keyboard has this)
-- `VOLUME_UP` (not every keyboard has this)
-- `MUTE` (not every keyboard has this)
-- `NUMPAD_0` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_1` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_2` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_3` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_4` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_5` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_6` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_7` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_8` (outputting this key doesn't work in Linux, unfortunately)
-- `NUMPAD_9` (outputting this key doesn't work in Linux, unfortunately)
-- `CAPS_LOCK` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_MULTIPLY` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_ADD` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_SUBTRACT` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_DECIMAL` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_DIVIDE` (outputting this key doesn't work, unfortunately)
-- `NUMPAD_ENTER` (outputting this key doesn't work, unfortunately)
-- `SEMICOLON` (outputting this key doesn't work, unfortunately)
+- `LEFT_SUPER`
+- `LEFT_WINDOWS` (alias of LEFT_SUPER)
+- `LEFT_COMMAND` (alias of LEFT_SUPER)
+- `LEFT_META` (alias of LEFT_SUPER)
+- `RIGHT_SUPER`
+- `RIGHT_WINDOWS` (alias of RIGHT_SUPER)
+- `RIGHT_COMMAND` (alias of RIGHT_SUPER)
+- `RIGHT_META` (alias of RIGHT_SUPER)
+- `PRINT_SCREEN`
+- `VOLUME_DOWN`
+- `VOLUME_UP`
+- `MUTE`
+- `PAUSE_BREAK`
+- `NUMPAD_0`
+- `NUMPAD_1`
+- `NUMPAD_2`
+- `NUMPAD_3`
+- `NUMPAD_4`
+- `NUMPAD_5`
+- `NUMPAD_6`
+- `NUMPAD_7`
+- `NUMPAD_8`
+- `NUMPAD_9`
+- `NUMPAD_MULTIPLY`
+- `NUMPAD_ADD`
+- `NUMPAD_SUBTRACT`
+- `NUMPAD_DECIMAL`
+- `NUMPAD_DIVIDE`
+- `NUMPAD_ENTER`
+- `CAPS_LOCK`
+- `NUM_LOCK`
+- `SCROLL_LOCK`
+- `SEMICOLON`
 - `EQUAL`
 - `COMMA`
 - `MINUS`
 - `PERIOD`
 - `SLASH`
-- `BACKTICK`
+- `BACKTICK` (aka grave accent)
 - `LEFT_BRACKET`
 - `BACKSLASH`
 - `RIGHT_BRACKET`
 - `QUOTE`
-- `SCROLL_LOCK` (outputting this key doesn't work, unfortunately)
-- `PAUSE_BREAK` (outputting this key doesn't work, unfortunately)
-- `NUM_LOCK` (outputting this key doesn't work, unfortunately)
-- `MUTE` (outputting this key doesn't work, unfortunately)
-- `VOLUME_UP` (outputting this key doesn't work, unfortunately)
-- `VOLUME_DOWN` (outputting this key doesn't work, unfortunately)
-- `CALCULATOR` (outputting this key doesn't work, unfortunately)
 - `A`
 - `B`
 - `C`
@@ -693,22 +678,6 @@ List of keys:
 - `EIGHT`
 - `NINE`
 - `ANY` (this one can't be pressed; it's only used when registering event listeners)
-
-### ModifierKey
-
-This object has strings on it with the names of modifier keys on the keyboard. These strings get passed into keyboard-related functions, like `Keyboard.tap`.
-
-List of modifier keys:
-
-- `ALT`
-- `COMMAND`
-- `WINDOWS`
-- `SUPER`
-- `META`
-- `CONTROL`
-- `SHIFT`
-
-On most keyboards, COMMAND, WINDOWS, SUPER, and META all refer to the same key.
 
 ### MouseButton
 
