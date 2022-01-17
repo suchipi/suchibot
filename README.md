@@ -4,9 +4,31 @@ A cross-platform AutoHotKey-like thing with JavaScript/TypeScript as its scripti
 
 ## Installation
 
+First, you'll need [node.js](https://nodejs.org/en/download/) installed. Suchibot should work with most versions of Node, but for best compatibility, you can install [version 14](https://nodejs.org/dist/latest-fermium/), which is what it was tested against.
+
+On Windows, you'll also need to install the [Microsoft Visual C++ Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads).
+
+If you're running Windows 10 N, you'll also need to install the [Media Feature Pack](https://support.microsoft.com/en-us/topic/media-feature-pack-for-windows-10-n-may-2020-ebbdf559-b84c-0fc2-bd51-e23c9f6a4439).
+
+On Linux, you also need libXtst. You can get that on Ubuntu-based distros by running this in a terminal:
+
+> NOTE: I haven't tested suchibot in wayland, only Xorg. It probably doesn't work in wayland.
+
+```
+sudo apt install build-essential libxtst-dev
+```
+
+On macOS, you also need XCode command-line tools. You can get that by running this in a terminal:
+
+```
+xcode-select --install
+```
+
+Then, to install suchibot itself:
+
 ```
 # cd to a folder where you want to keep your scripts, then:
-$ npm install suchibot
+npm install suchibot
 ```
 
 ## Usage (CLI)

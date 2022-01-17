@@ -90,7 +90,7 @@ function main(suchibot: typeof import("./index")) {
     } else if (fs.existsSync(defaultJsPath)) {
       modulePath = defaultJsPath;
     } else {
-      console.error(
+      console.log(
         kleur.red(
           `Not sure which file to run. Please either specify a script as the first argument to suchibot, or create a file named ${kleur.yellow(
             "script.ts"
@@ -108,7 +108,7 @@ function main(suchibot: typeof import("./index")) {
   }
 
   if (!fs.existsSync(modulePath)) {
-    console.error("Trying to load non-existent file:", modulePath);
+    console.log("Trying to load non-existent file:", modulePath);
     console.log("");
     printUsage();
     process.exit(1);
@@ -116,19 +116,21 @@ function main(suchibot: typeof import("./index")) {
 
   suchibot.startListening();
   console.log(
-    "Now listening for mouse/keyboard events. Press Ctrl+C to exit at any time."
+    kleur.green(
+      "Now listening for mouse/keyboard events. Press Ctrl+C to exit at any time."
+    )
   );
 
   process.on("unhandledRejection", (error: any) => {
-    console.error(kleur.red("An unhandled Promise rejection occurred:"));
-    console.error(formatError(error));
+    console.log(kleur.red("An unhandled Promise rejection occurred:"));
+    console.log(formatError(error));
   });
 
   try {
     require(modulePath);
   } catch (err: any) {
-    console.error(kleur.red("An error occurred in your script:"));
-    console.error(formatError(err));
+    console.log(kleur.red("An error occurred in your script:"));
+    console.log(formatError(err));
 
     suchibot.stopListening();
     process.exit(1);
