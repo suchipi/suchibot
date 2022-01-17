@@ -1,6 +1,6 @@
 import { Key, MouseButton } from "./types";
-import * as nut from "@nut-tree/nut-js";
-import { sleep } from "./sleep";
+import * as nut from "@suchipi/nut-js";
+import { sleepSync } from "./sleep";
 
 const keyToNutMap: { [key in keyof typeof Key]: number } = {
   BACKSPACE: nut.Key.Backspace,
@@ -183,11 +183,10 @@ nut.keyboard.config.autoDelayMs = 10;
 export const Keyboard = {
   tap(key: Key) {
     const nutKey = keyToNut(key);
-    nut.keyboard.pressKey(nutKey).then(() => {
-      sleep(10).then(() => {
-        nut.keyboard.releaseKey(nutKey);
-      });
-    });
+
+    nut.keyboard.pressKey(nutKey);
+    sleepSync(10);
+    nut.keyboard.pressKey(nutKey);
   },
 
   hold(key: Key) {
@@ -208,43 +207,25 @@ export const Keyboard = {
 
 export const Mouse = {
   moveTo(x: number, y: number) {
-    nut.mouse.move([new nut.Point(x, y)]);
+    nut.mouse.setPosition(new nut.Point(x, y));
   },
   click(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse
-      .pressButton(nutButton)
-      .then(() => {
-        return sleep(4);
-      })
-      .then(() => {
-        return nut.mouse.releaseButton(nutButton);
-      });
+    nut.mouse.pressButton(nutButton);
+    sleepSync(4);
+    nut.mouse.releaseButton(nutButton);
   },
   doubleClick(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse
-      .pressButton(nutButton)
-      .then(() => {
-        return sleep(4);
-      })
-      .then(() => {
-        return nut.mouse.releaseButton(nutButton);
-      })
-      .then(() => {
-        return sleep(4);
-      })
-      .then(() => {
-        return nut.mouse.pressButton(nutButton);
-      })
-      .then(() => {
-        return sleep(4);
-      })
-      .then(() => {
-        return nut.mouse.releaseButton(nutButton);
-      });
+    nut.mouse.pressButton(nutButton);
+    sleepSync(4);
+    nut.mouse.releaseButton(nutButton);
+    sleepSync(4);
+    nut.mouse.pressButton(nutButton);
+    sleepSync(4);
+    nut.mouse.releaseButton(nutButton);
   },
   hold(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
@@ -256,39 +237,33 @@ export const Mouse = {
 
     nut.mouse.releaseButton(nutButton);
   },
-  async getPosition(): Promise<{ x: number; y: number }> {
+  getPosition(): { x: number; y: number } {
     return nut.mouse.getPosition();
   },
   scroll({ x = 0, y = 0 } = {}) {
-    let first: () => Promise<any> = () => Promise.resolve();
-    let second: () => Promise<any> = () => Promise.resolve();
-
     if (x != 0) {
       if (x < 0) {
-        first = () => nut.mouse.scrollLeft(Math.abs(x));
+        nut.mouse.scrollLeft(Math.abs(x));
       } else {
-        first = () => nut.mouse.scrollRight(x);
+        nut.mouse.scrollRight(x);
       }
     }
 
     if (y != 0) {
       if (y < 0) {
-        second = () => nut.mouse.scrollUp(Math.abs(x));
+        nut.mouse.scrollUp(Math.abs(x));
       } else {
-        second = () => nut.mouse.scrollDown(x);
+        nut.mouse.scrollDown(x);
       }
     }
-
-    first().then(second);
   },
 };
 
 export const Screen = {
-  async getSize(): Promise<{ width: number; height: number }> {
-    const [width, height] = await Promise.all([
-      nut.screen.width(),
-      nut.screen.height(),
-    ]);
+  getSize(): { width: number; height: number } {
+    const width = nut.screen.width();
+    const height = nut.screen.height();
+
     return { width, height };
   },
 };

@@ -553,19 +553,19 @@ Functions that give you information about the screen.
 
 #### Screen.getSize
 
-Returns a Promise that resolves to an object with `width` and `height` properties describing the screen resolution in pixels.
+Returns an object with `width` and `height` properties describing the screen resolution in pixels.
 
 Definition:
 
 ```ts
-function getSize(): Promise<{ width: number; height: number }>;
+function getSize(): { width: number; height: number };
 ```
 
 Example:
 
 ```js
 // get the screen resolution
-const { width, height } = await Screen.getSize();
+const { width, height } = Screen.getSize();
 console.log(width, height); // 1920, 1080
 ```
 
@@ -782,8 +782,6 @@ sleep(1000).then(() => {
 This function pauses execution (blocking the main thread) for the specified number of milliseconds.
 
 Note that, if this function is used, no processing will occur until the specified amount of time has passed; notably, other mouse/keyboard events will not be processed. To avoid this issue, use `sleep` (not `sleepSync`) inside of an `async` function.
-
-Also, be aware that the program will use a lot of CPU during a `sleepSync` call, but not when using `sleep`.
 
 #### Definition
 

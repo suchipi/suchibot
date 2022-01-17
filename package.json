@@ -21,8 +21,8 @@
   "author": "Lily Scott <me@suchipi.com>",
   "license": "MIT",
   "dependencies": {
-    "@nut-tree/nut-js": "^2.0.0",
-    "kame": "^0.6.1",
+    "@suchipi/nut-js": "^2.0.1",
+    "kame": "^0.6.2",
     "kleur": "^4.1.4",
     "mitt": "^3.0.0",
     "robotjs": "^0.6.0",
