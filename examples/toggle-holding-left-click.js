@@ -1,4 +1,4 @@
-import { Keyboard, Key, Mouse, MouseButton } from "../index";
+import { Keyboard, Key, Mouse, MouseButton } from "suchibot";
 
 // This script toggles whether the left mouse button is being held whenever you press scroll lock.
 // I use it to hold down left-click in Minecraft so I can keep mining cobblestone from the cobblestone generator :3

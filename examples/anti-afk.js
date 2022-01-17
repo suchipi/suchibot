@@ -1,4 +1,4 @@
-import { Keyboard, Key, sleep } from "../index";
+import { Keyboard, Key, sleep } from "suchibot";
 
 // This script presses "A" or "D" every 5 minutes,
 // To prevent your character from getting kicked from a game for being AFK.
