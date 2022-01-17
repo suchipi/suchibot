@@ -1,6 +1,6 @@
 # suchibot
 
-A cross-platform AutoHotKey-like thing with JavaScript/TypeScript as its scripting language. Built on top of [`uiohook-napi`](https://npm.im/uiohook-napi) and [`robotjs`](https://npm.im/robotjs).
+A cross-platform AutoHotKey-like thing with JavaScript/TypeScript as its scripting language. Built on top of [`uiohook-napi`](https://npm.im/uiohook-napi) and [`nut.js`](https://github.com/nut-tree/nut.js).
 
 ## Installation
 
