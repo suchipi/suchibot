@@ -53,6 +53,8 @@ $ npx suchibot ./myscript.js
 
 It's recommended to use Visual Studio Code to write your script, as it will give you autocomplete for the functions and key names (since they have TypeScript types).
 
+See the [examples folder](https://github.com/suchipi/suchibot/tree/main/examples) for some example scripts.
+
 ## Usage (Node API)
 
 Import stuff from the suchibot library and set up macros however, then use `suchibot.startListening()` and `suchibot.stopListening()`:
@@ -149,6 +151,8 @@ await sleep(100);
 // `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
 sleepSync(100);
 ```
+
+See the [examples folder](https://github.com/suchipi/suchibot/tree/main/examples) for some example scripts.
 
 ## Full API Documentation
 
