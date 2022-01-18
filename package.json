@@ -1,6 +1,6 @@
 {
   "name": "suchibot",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A cross-platform AutoHotKey-like thing with TypeScript as its scripting language",
   "main": "index.js",
   "bin": "index.js",
