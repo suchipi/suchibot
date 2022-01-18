@@ -1,269 +1,259 @@
 import { Key, MouseButton } from "./types";
-import * as nut from "@suchipi/nut-js";
+import * as libnut from "@nut-tree/libnut";
 import { sleepSync } from "./sleep";
 
-const keyToNutMap: { [key in keyof typeof Key]: number } = {
-  BACKSPACE: nut.Key.Backspace,
-  DELETE: nut.Key.Delete,
-  ENTER: nut.Key.Enter,
-  TAB: nut.Key.Tab,
-  ESCAPE: nut.Key.Escape,
-  UP: nut.Key.Up,
-  DOWN: nut.Key.Down,
-  RIGHT: nut.Key.Right,
-  LEFT: nut.Key.Left,
-  HOME: nut.Key.Home,
-  END: nut.Key.End,
-  PAGE_UP: nut.Key.PageUp,
-  PAGE_DOWN: nut.Key.PageDown,
-  F1: nut.Key.F1,
-  F2: nut.Key.F2,
-  F3: nut.Key.F3,
-  F4: nut.Key.F4,
-  F5: nut.Key.F5,
-  F6: nut.Key.F6,
-  F7: nut.Key.F7,
-  F8: nut.Key.F8,
-  F9: nut.Key.F9,
-  F10: nut.Key.F10,
-  F11: nut.Key.F11,
-  F12: nut.Key.F12,
-  F13: nut.Key.F13,
-  F14: nut.Key.F14,
-  F15: nut.Key.F15,
-  F16: nut.Key.F16,
-  F17: nut.Key.F17,
-  F18: nut.Key.F18,
-  F19: nut.Key.F19,
-  F20: nut.Key.F20,
-  F21: nut.Key.F21,
-  F22: nut.Key.F22,
-  F23: nut.Key.F23,
-  F24: nut.Key.F24,
+const keyToNutMap: { [key in keyof typeof Key]: string | null } = {
+  BACKSPACE: "backspace",
+  DELETE: "delete",
+  ENTER: "enter",
+  TAB: "tab",
+  ESCAPE: "escape",
+  UP: "up",
+  DOWN: "down",
+  RIGHT: "right",
+  LEFT: "left",
+  HOME: "home",
+  END: "end",
+  PAGE_UP: "pageup",
+  PAGE_DOWN: "pagedown",
+  F1: "f1",
+  F2: "f2",
+  F3: "f3",
+  F4: "f4",
+  F5: "f5",
+  F6: "f6",
+  F7: "f7",
+  F8: "f8",
+  F9: "f9",
+  F10: "f10",
+  F11: "f11",
+  F12: "f12",
+  F13: "f13",
+  F14: "f14",
+  F15: "f15",
+  F16: "f16",
+  F17: "f17",
+  F18: "f18",
+  F19: "f19",
+  F20: "f20",
+  F21: "f21",
+  F22: "f22",
+  F23: "f23",
+  F24: "f24",
 
-  LEFT_ALT: nut.Key.LeftAlt,
-  RIGHT_ALT: nut.Key.RightAlt,
+  LEFT_ALT: "alt",
+  RIGHT_ALT: "alt",
 
-  LEFT_CONTROL: nut.Key.LeftControl,
-  RIGHT_CONTROL: nut.Key.LeftControl,
+  LEFT_CONTROL: "control",
+  RIGHT_CONTROL: "control",
 
-  LEFT_SHIFT: nut.Key.LeftShift,
-  RIGHT_SHIFT: nut.Key.RightShift,
+  LEFT_SHIFT: "shift",
+  RIGHT_SHIFT: "space",
 
-  SPACE: nut.Key.Space,
-  PRINT_SCREEN: nut.Key.Print,
-  INSERT: nut.Key.Insert,
-  VOLUME_DOWN: nut.Key.AudioVolDown,
-  VOLUME_UP: nut.Key.AudioVolUp,
-  MUTE: nut.Key.AudioMute,
-  NUMPAD_0: nut.Key.NumPad0,
-  NUMPAD_1: nut.Key.NumPad1,
-  NUMPAD_2: nut.Key.NumPad2,
-  NUMPAD_3: nut.Key.NumPad3,
-  NUMPAD_4: nut.Key.NumPad4,
-  NUMPAD_5: nut.Key.NumPad5,
-  NUMPAD_6: nut.Key.NumPad6,
-  NUMPAD_7: nut.Key.NumPad7,
-  NUMPAD_8: nut.Key.NumPad8,
-  NUMPAD_9: nut.Key.NumPad9,
+  SPACE: "space",
+  PRINT_SCREEN: "printscreen",
+  INSERT: "insert",
+  VOLUME_DOWN: "audio_vol_down",
+  VOLUME_UP: "audio_vol_up",
+  MUTE: "audio_mute",
+  NUMPAD_0: "numpad_0",
+  NUMPAD_1: "numpad_1",
+  NUMPAD_2: "numpad_2",
+  NUMPAD_3: "numpad_3",
+  NUMPAD_4: "numpad_4",
+  NUMPAD_5: "numpad_5",
+  NUMPAD_6: "numpad_6",
+  NUMPAD_7: "numpad_7",
+  NUMPAD_8: "numpad_8",
+  NUMPAD_9: "numpad_9",
 
-  A: nut.Key.A,
-  B: nut.Key.B,
-  C: nut.Key.C,
-  D: nut.Key.D,
-  E: nut.Key.E,
-  F: nut.Key.F,
-  G: nut.Key.G,
-  H: nut.Key.H,
-  I: nut.Key.I,
-  J: nut.Key.J,
-  K: nut.Key.K,
-  L: nut.Key.L,
-  M: nut.Key.M,
-  N: nut.Key.N,
-  O: nut.Key.O,
-  P: nut.Key.P,
-  Q: nut.Key.Q,
-  R: nut.Key.R,
-  S: nut.Key.S,
-  T: nut.Key.T,
-  U: nut.Key.U,
-  V: nut.Key.V,
-  W: nut.Key.W,
-  X: nut.Key.X,
-  Y: nut.Key.Y,
-  Z: nut.Key.Z,
+  A: "a",
+  B: "b",
+  C: "c",
+  D: "d",
+  E: "e",
+  F: "f",
+  G: "g",
+  H: "h",
+  I: "i",
+  J: "j",
+  K: "k",
+  L: "l",
+  M: "m",
+  N: "n",
+  O: "o",
+  P: "p",
+  Q: "q",
+  R: "r",
+  S: "s",
+  T: "t",
+  U: "u",
+  V: "v",
+  W: "w",
+  X: "x",
+  Y: "y",
+  Z: "z",
 
-  ZERO: nut.Key.Num0,
-  ONE: nut.Key.Num1,
-  TWO: nut.Key.Num2,
-  THREE: nut.Key.Num3,
-  FOUR: nut.Key.Num4,
-  FIVE: nut.Key.Num5,
-  SIX: nut.Key.Num6,
-  SEVEN: nut.Key.Num7,
-  EIGHT: nut.Key.Num8,
-  NINE: nut.Key.Num9,
+  ZERO: "0",
+  ONE: "1",
+  TWO: "2",
+  THREE: "3",
+  FOUR: "4",
+  FIVE: "5",
+  SIX: "6",
+  SEVEN: "7",
+  EIGHT: "8",
+  NINE: "9",
 
-  ANY: -99999,
+  ANY: null,
 
-  CAPS_LOCK: nut.Key.CapsLock,
-  NUMPAD_MULTIPLY: nut.Key.Multiply,
-  NUMPAD_ADD: nut.Key.Add,
-  NUMPAD_SUBTRACT: nut.Key.Subtract,
-  NUMPAD_DECIMAL: nut.Key.Decimal,
-  NUMPAD_DIVIDE: nut.Key.Divide,
-  NUMPAD_ENTER: nut.Key.Enter,
-  SEMICOLON: nut.Key.Semicolon,
+  CAPS_LOCK: null,
+  NUMPAD_MULTIPLY: null,
+  NUMPAD_ADD: null,
+  NUMPAD_SUBTRACT: null,
+  NUMPAD_DECIMAL: null,
+  NUMPAD_DIVIDE: null,
+  NUMPAD_ENTER: "enter",
+  SEMICOLON: ";",
 
-  EQUAL: nut.Key.Equal,
-  COMMA: nut.Key.Comma,
-  MINUS: nut.Key.Minus,
-  PERIOD: nut.Key.Period,
-  SLASH: nut.Key.Slash,
-  BACKTICK: nut.Key.Grave,
-  LEFT_BRACKET: nut.Key.LeftBracket,
-  BACKSLASH: nut.Key.Backslash,
-  RIGHT_BRACKET: nut.Key.RightBracket,
-  QUOTE: nut.Key.Quote,
+  EQUAL: "=",
+  COMMA: ",",
+  MINUS: "-",
+  PERIOD: ".",
+  SLASH: "/",
+  BACKTICK: "~",
+  LEFT_BRACKET: "[",
+  BACKSLASH: "\\",
+  RIGHT_BRACKET: "]",
+  QUOTE: "'",
 
-  SCROLL_LOCK: nut.Key.ScrollLock,
-  PAUSE_BREAK: nut.Key.Pause,
-  NUM_LOCK: nut.Key.NumLock,
+  SCROLL_LOCK: null,
+  PAUSE_BREAK: null,
+  NUM_LOCK: null,
 
-  LEFT_COMMAND: nut.Key.LeftSuper,
-  LEFT_WINDOWS: nut.Key.LeftSuper,
-  LEFT_SUPER: nut.Key.LeftSuper,
-  LEFT_META: nut.Key.LeftSuper,
+  LEFT_COMMAND: "command",
+  LEFT_WINDOWS: "command",
+  LEFT_SUPER: "command",
+  LEFT_META: "command",
 
-  RIGHT_COMMAND: nut.Key.LeftSuper,
-  RIGHT_WINDOWS: nut.Key.LeftSuper,
-  RIGHT_SUPER: nut.Key.LeftSuper,
-  RIGHT_META: nut.Key.LeftSuper,
+  RIGHT_COMMAND: "command",
+  RIGHT_WINDOWS: "command",
+  RIGHT_SUPER: "command",
+  RIGHT_META: "command",
 };
 
-const mouseButtonToNutMap: { [key in keyof typeof MouseButton]: number } = {
-  LEFT: nut.Button.LEFT,
-  RIGHT: nut.Button.RIGHT,
-  MIDDLE: nut.Button.MIDDLE,
-  ANY: -99999,
+const mouseButtonToNutMap: {
+  [key in keyof typeof MouseButton]: string | null;
+} = {
+  LEFT: "left",
+  RIGHT: "right",
+  MIDDLE: "middle",
+
+  ANY: null,
 };
 
-function keyToNut(key: Key): number {
+function keyToNut(key: Key): string {
   if (key === Key.ANY) {
     throw new Error(
-      `The "ANY" key is for input listeners only; it can't be pressed`
+      `The "ANY" key is for input listeners only; it can't be pressed/released`
     );
   }
 
   const result = keyToNutMap[key];
 
   if (result == null) {
-    throw new Error("Invalid key: " + key);
+    throw new Error("Pressing/releasing key is not yet supported: " + key);
   }
   return result;
 }
 
-function mouseButtonToNut(button: MouseButton): number {
+function mouseButtonToNut(button: MouseButton): string {
   if (button === MouseButton.ANY) {
     throw new Error(
-      `The "ANY" mouse button is for input listeners only; it can't be pressed`
+      `The "ANY" mouse button is for input listeners only; it can't be pressed/released`
     );
   }
 
   const result = mouseButtonToNutMap[button];
   if (result == null) {
-    throw new Error("Invalid mouse button: " + button);
+    throw new Error(
+      "Pressing/releasing mouse button is not yet supported: " + button
+    );
   }
   return result;
 }
-
-nut.keyboard.config.autoDelayMs = 10;
 
 export const Keyboard = {
   tap(key: Key) {
     const nutKey = keyToNut(key);
 
-    nut.keyboard.pressKey(nutKey);
+    libnut.keyToggle(nutKey, "down");
     sleepSync(10);
-    nut.keyboard.releaseKey(nutKey);
+    libnut.keyToggle(nutKey, "up");
   },
 
   hold(key: Key) {
     const nutKey = keyToNut(key);
-    nut.keyboard.pressKey(nutKey);
+    libnut.keyToggle(nutKey, "down");
   },
 
   release(key: Key) {
     const nutKey = keyToNut(key);
-    nut.keyboard.releaseKey(nutKey);
+    libnut.keyToggle(nutKey, "up");
   },
 
   type(textToType: string, delayBetweenKeyPresses: number = 10) {
-    nut.keyboard.config.autoDelayMs = delayBetweenKeyPresses;
-    nut.keyboard.type(textToType);
+    textToType.split("").forEach((char, index, all) => {
+      libnut.typeString(char);
+      if (index != all.length - 1) {
+        sleepSync(delayBetweenKeyPresses);
+      }
+    });
   },
 };
 
 export const Mouse = {
   moveTo(x: number, y: number) {
-    nut.mouse.setPosition(new nut.Point(x, y));
+    libnut.moveMouse(x, y);
   },
   click(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse.pressButton(nutButton);
+    libnut.mouseToggle("down", nutButton);
     sleepSync(4);
-    nut.mouse.releaseButton(nutButton);
+    libnut.mouseToggle("up", nutButton);
   },
   doubleClick(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse.pressButton(nutButton);
+    libnut.mouseToggle("down", nutButton);
     sleepSync(4);
-    nut.mouse.releaseButton(nutButton);
+    libnut.mouseToggle("up", nutButton);
     sleepSync(4);
-    nut.mouse.pressButton(nutButton);
+    libnut.mouseToggle("down", nutButton);
     sleepSync(4);
-    nut.mouse.releaseButton(nutButton);
+    libnut.mouseToggle("up", nutButton);
   },
   hold(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse.pressButton(nutButton);
+    libnut.mouseToggle("down", nutButton);
   },
   release(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
-    nut.mouse.releaseButton(nutButton);
+    libnut.mouseToggle("up", nutButton);
   },
   getPosition(): { x: number; y: number } {
-    return nut.mouse.getPosition();
+    return libnut.getMousePos();
   },
   scroll({ x = 0, y = 0 } = {}) {
-    if (x != 0) {
-      if (x < 0) {
-        nut.mouse.scrollLeft(Math.abs(x));
-      } else {
-        nut.mouse.scrollRight(x);
-      }
-    }
-
-    if (y != 0) {
-      if (y < 0) {
-        nut.mouse.scrollUp(Math.abs(x));
-      } else {
-        nut.mouse.scrollDown(x);
-      }
-    }
+    libnut.scrollMouse(x, y);
   },
 };
 
 export const Screen = {
   getSize(): { width: number; height: number } {
-    const width = nut.screen.width();
-    const height = nut.screen.height();
-
-    return { width, height };
+    return libnut.getScreenSize();
   },
 };

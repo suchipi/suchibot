@@ -21,7 +21,7 @@
   "author": "Lily Scott <me@suchipi.com>",
   "license": "MIT",
   "dependencies": {
-    "@suchipi/nut-js": "^2.0.1",
+    "@nut-tree/libnut": "^2.1.5-next.20220117230646",
     "kame": "^0.6.2",
     "kleur": "^4.1.4",
     "mitt": "^3.0.0",

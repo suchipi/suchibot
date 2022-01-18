@@ -1,6 +1,5 @@
 import { Keyboard, Mouse, Key, MouseButton, sleep } from "./index";
 
-(async () => {
-  sleep(1000);
-  Mouse.doubleClick();
-})();
+Keyboard.onDown(Key.SCROLL_LOCK, () => {
+  Keyboard.tap(Key.NUMPAD_1);
+});
