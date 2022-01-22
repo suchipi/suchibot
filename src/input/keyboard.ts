@@ -1,45 +1,23 @@
-import { Key, MouseButton } from "./types";
+import { Key, Listener } from "../types";
 import { uIOhook, UiohookKey } from "uiohook-napi";
 import mitt, { Emitter } from "mitt";
 
-// ------------ mouse stuff -------------
-export class MouseEvent {
-  type: "click" | "down" | "up" | "move";
-  button: MouseButton | null;
-  x: number;
-  y: number;
-
-  constructor(
-    type: "click" | "down" | "up" | "move",
-    button: MouseButton | null,
-    x: number,
-    y: number
-  ) {
-    this.type = type;
-    this.button = button;
-    this.x = x;
-    this.y = y;
-  }
-}
-
-const uioToMouseButtonMap = {
-  1: MouseButton.LEFT,
-  2: MouseButton.MIDDLE,
-  3: MouseButton.RIGHT,
-};
-
-function uioToMouseButton(uioButton: number): MouseButton | null {
-  return uioToMouseButtonMap[uioButton] || null;
-}
-
 // ------------ keyboard stuff -------------
+const IS_KEYBOARD_EVENT = Symbol("IS_KEYBOARD_EVENT");
+
+export function isKeyboardEvent(event: any): event is KeyboardEvent {
+  return typeof event === "object" && event != null && event[IS_KEYBOARD_EVENT];
+}
+
 export class KeyboardEvent {
   type: "down" | "up";
   key: Key;
+  [IS_KEYBOARD_EVENT]: true;
 
   constructor(type: "down" | "up", key: Key) {
     this.type = type;
     this.key = key;
+    this[IS_KEYBOARD_EVENT] = true;
   }
 }
 
@@ -173,60 +151,9 @@ function uioToKey(uioKey: number): Key | null {
 
 // ------------ event emitter setup -------------
 const events: Emitter<{
-  mousedown: MouseEvent;
-  mouseup: MouseEvent;
-  mousemove: MouseEvent;
-  click: MouseEvent;
   keydown: KeyboardEvent;
   keyup: KeyboardEvent;
 }> = mitt();
-
-uIOhook.on("click", (event) => {
-  const button = uioToMouseButton(event.button as number);
-  if (!button) {
-    console.warn(
-      "WARNING: received click for unsupported mouse button:",
-      event.button
-    );
-    return;
-  }
-
-  const newEvent = new MouseEvent("click", button, event.x, event.y);
-  events.emit("click", newEvent);
-});
-
-uIOhook.on("mousedown", (event) => {
-  const button = uioToMouseButton(event.button as number);
-  if (!button) {
-    console.warn(
-      "WARNING: received mousedown for unsupported mouse button:",
-      event.button
-    );
-    return;
-  }
-
-  const newEvent = new MouseEvent("down", button, event.x, event.y);
-  events.emit("mousedown", newEvent);
-});
-
-uIOhook.on("mouseup", (event) => {
-  const button = uioToMouseButton(event.button as number);
-  if (!button) {
-    console.warn(
-      "WARNING: received mouseup for unsupported mouse button:",
-      event.button
-    );
-    return;
-  }
-
-  const newEvent = new MouseEvent("up", button, event.x, event.y);
-  events.emit("mouseup", newEvent);
-});
-
-uIOhook.on("mousemove", (event) => {
-  const newEvent = new MouseEvent("move", null, event.x, event.y);
-  events.emit("mousemove", newEvent);
-});
 
 uIOhook.on("keydown", (event) => {
   const key = uioToKey(event.keycode);
@@ -258,64 +185,33 @@ uIOhook.on("keyup", (event) => {
 
 // ------------ public API -------------
 export const Keyboard = {
-  onDown(key: Key, listener: (event: KeyboardEvent) => void) {
-    events.on("keydown", (event) => {
+  onDown(key: Key, eventHandler: (event: KeyboardEvent) => void): Listener {
+    const callback = (event) => {
       if (key === Key.ANY || event.key === key) {
-        listener(event);
+        eventHandler(event);
       }
-    });
+    };
+
+    events.on("keydown", callback);
+    return {
+      stop() {
+        events.off("keydown", callback);
+      },
+    };
   },
-  onUp(key: Key, listener: (event: KeyboardEvent) => void) {
-    events.on("keyup", (event) => {
+
+  onUp(key: Key, eventHandler: (event: KeyboardEvent) => void): Listener {
+    const callback = (event) => {
       if (key === Key.ANY || event.key === key) {
-        listener(event);
+        eventHandler(event);
       }
-    });
+    };
+
+    events.on("keyup", callback);
+    return {
+      stop() {
+        events.off("keyup", callback);
+      },
+    };
   },
 };
-
-export const Mouse = {
-  onDown(button: MouseButton, listener: (event: MouseEvent) => void) {
-    events.on("mousedown", (event) => {
-      if (
-        String(event.button) === String(button) ||
-        String(button) === String(MouseButton.ANY)
-      ) {
-        listener(event);
-      }
-    });
-  },
-  onUp(button: MouseButton, listener: (event: MouseEvent) => void) {
-    events.on("mouseup", (event) => {
-      if (
-        String(event.button) === String(button) ||
-        String(button) === String(MouseButton.ANY)
-      ) {
-        listener(event);
-      }
-    });
-  },
-  onClick(button: MouseButton, listener: (event: MouseEvent) => void) {
-    events.on("click", (event) => {
-      if (
-        String(event.button) === String(button) ||
-        String(button) === String(MouseButton.ANY)
-      ) {
-        listener(event);
-      }
-    });
-  },
-  onMove(listener: (event: MouseEvent) => void) {
-    events.on("mousemove", (event) => {
-      listener(event);
-    });
-  },
-};
-
-export function startListening() {
-  uIOhook.start();
-}
-
-export function stopListening() {
-  uIOhook.stop();
-}

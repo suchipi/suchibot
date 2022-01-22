@@ -149,3 +149,7 @@ export const MouseButton = {
 
   ANY: "ANY" as MouseButton,
 };
+
+export type Listener = {
+  stop(): void;
+};

@@ -1,21 +1,43 @@
 import * as input from "./input";
 import * as output from "./output";
 
-export { Key, MouseButton } from "./types";
-export { MouseEvent, KeyboardEvent } from "./input";
-export { sleep, sleepSync } from "./sleep";
+import { Key, MouseButton } from "./types";
+import {
+  MouseEvent,
+  KeyboardEvent,
+  isKeyboardEvent,
+  isMouseEvent,
+  startListening,
+  stopListening,
+} from "./input";
+import { sleep, sleepSync } from "./sleep";
+import { record, Recording } from "./recording";
+import { Screen } from "./screen";
 
-export const Mouse = {
+const Mouse = {
   ...output.Mouse,
   ...input.Mouse,
 };
 
-export const Keyboard = {
+const Keyboard = {
   ...output.Keyboard,
   ...input.Keyboard,
 };
 
-export const Screen = output.Screen;
-
-export const startListening = input.startListening;
-export const stopListening = input.stopListening;
+export {
+  Mouse,
+  Keyboard,
+  Key,
+  MouseButton,
+  MouseEvent,
+  KeyboardEvent,
+  isKeyboardEvent,
+  isMouseEvent,
+  sleep,
+  sleepSync,
+  record,
+  Recording,
+  Screen,
+  startListening,
+  stopListening,
+};

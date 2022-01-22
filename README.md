@@ -79,7 +79,16 @@ suchibot.stopListening();
 ## Quick API Overview
 
 ```ts
-import { Key, Keyboard, Mouse, MouseButton, Screen, sleep } from "suchibot";
+import {
+  Key,
+  Keyboard,
+  Mouse,
+  MouseButton,
+  Screen,
+  sleep,
+  sleepSync,
+  record,
+} from "suchibot";
 
 // `Mouse` contains functions for capturing and simulating mouse events, eg:
 Mouse.click(MouseButton.RIGHT);
@@ -150,6 +159,24 @@ await sleep(100);
 
 // `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
 sleepSync(100);
+
+// `record` records all the mouse/keyboard events that happen until you
+// call `recording.stop()`, and then you can replay the recording to simulate
+// the same mouse/keyboard events.
+
+// Starts the recording...
+const recording = record();
+
+// We'll take a 4-second recording by waiting 4000ms before calling `stop`.
+await sleep(4000);
+
+// Move the mouse around, press keys, etc.
+
+// Now, stop the recording.
+recording.stop();
+
+// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+recording.replay();
 ```
 
 See the [examples folder](https://github.com/suchipi/suchibot/tree/main/examples) for some example scripts.
@@ -320,13 +347,15 @@ Mouse.scroll({ x: 100, y: 100 });
 
 Registers a function to be called when a mouse button is pressed down.
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the mouse button is pressed down.
+
 Definition:
 
 ```ts
 function onDown(
   button: MouseButton,
-  listener: (event: MouseEvent) => void
-): void;
+  eventHandler: (event: MouseEvent) => void
+): Listener;
 ```
 
 Example:
@@ -347,10 +376,15 @@ Mouse.onDown(MouseButton.ANY, (event) => {
 
 Registers a function to be called when a mouse button is released (stops being held down).
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the mouse button is released.
+
 Definition:
 
 ```ts
-function onUp(button: MouseButton, listener: (event: MouseEvent) => void): void;
+function onUp(
+  button: MouseButton,
+  listener: (event: MouseEvent) => void
+): Listener;
 ```
 
 Example:
@@ -371,12 +405,14 @@ Mouse.onUp(MouseButton.ANY, (event) => {
 
 Registers a function to be called when a mouse button is clicked (pressed and then released without moving around between the press and release).
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the mouse button is clicked.
+
 Definition:
 
 ```ts
 function onClick(
   button: MouseButton,
-  listener: (event: MouseEvent) => void
+  eventHandler: (event: MouseEvent) => void
 ): void;
 ```
 
@@ -398,10 +434,12 @@ Mouse.onClick(MouseButton.ANY, (event) => {
 
 Registers a function to be called whenever the mouse cursor is moved.
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the mouse is moved.
+
 Definition:
 
 ```ts
-function onMove(listener: (event: MouseEvent) => void): void;
+function onMove(eventHandler: (event: MouseEvent) => void): Listener;
 ```
 
 Example:
@@ -500,13 +538,15 @@ Each key on the keyboard can either be "down" or "up". When you hold a key down,
 
 `Keyboard.onDown` registers a function to be called whenever a key on the keyboard transitions from "up" to "down".
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the key is pressed down.
+
 Definition:
 
 ```ts
 function onDown(
-  button: MouseButton,
-  listener: (event: MouseEvent) => void
-): void;
+  button: Key,
+  eventHandler: (event: KeyboardEvent) => void
+): Listener;
 ```
 
 Example:
@@ -531,10 +571,16 @@ Each key on the keyboard can either be "down" or "up". When you hold a key down,
 
 `Keyboard.onUp` registers a function to be called whenever a key on the keyboard transitions from "down" to "up".
 
+Returns a `Listener` object; call `.stop()` on the listener to unregister the function, so it's no longer called when the key is released.
+
 Definition:
 
+<!-- prettier-ignore -->
 ```ts
-function onUp(button: MouseButton, listener: (event: MouseEvent) => void): void;
+function onUp(
+  button: Key,
+  eventHandler: (event: KeyboardEvent) => void
+): Listener;
 ```
 
 Example:
@@ -804,6 +850,93 @@ sleepSync(1000);
 
 // pause everything for 1 minute
 sleepSync(60000);
+```
+
+### record
+
+This function records all mouse/keyboard inputs so that they can be played back later. Inputs will start being recorded as soon as `record` is called. After some time has passed, call the `stop` function on the `Recording` that gets returned from `record` in order to stop recording input. Then, to replay those inputs, call the `replay` function on the `Recording`.
+
+#### Definition
+
+```ts
+function record(): Recording;
+
+// Where `Recording` is:
+type Recording = {
+  stop: () => void;
+  replay: () => void;
+};
+```
+
+#### Example
+
+```js
+// Start recording...
+const recording = record();
+
+// We'll take a 4-second recording by waiting 4000ms before calling `stop`.
+await sleep(4000);
+
+recording.stop();
+
+// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+recording.replay();
+```
+
+### Recording
+
+This object is returned from the `record` function, and has functions on it that let you stop and re-play the recording. You can use it to capture mouse/keyboard input, and then re-play it (make the same mouse/keyboard actions occur on the computer again).
+
+#### Definition
+
+```ts
+type Recording = {
+  stop: () => void;
+  replay: () => void;
+};
+```
+
+#### Example
+
+```js
+// Start recording...
+const recording = record();
+
+// We'll take a 4-second recording by waiting 4000ms before calling `stop`.
+await sleep(4000);
+
+recording.stop();
+
+// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+recording.replay();
+```
+
+### Listener
+
+This object is returned from `Mouse.onDown`, `Mouse.onUp`, `Mouse.onClick`, `Mouse.onMove`, `Keyboard.onDown`, and `Keyboard.onUp`. It has a `stop` function on it that will make the event listener/handler function you passed in stop being called when the corresponding input event happens. See the example below for more information.
+
+#### Definition
+
+```ts
+type Listener = {
+  stop: () => void;
+};
+```
+
+#### Example
+
+```js
+// Save the listener when calling an on* function:
+const listener = Mouse.onMove((event) => {
+  console.log(`Mouse moved to: ${event.x}, ${event.y}`);
+});
+
+// Now, if you move the mouse around, you'll see the console log messages.
+// To stop seeing them, you call `listener.stop`:
+listener.stop();
+
+// Now, you'll no longer see the console.log messages, because the function you
+// passed in to Mouse.onMove isn't being called anymore.
 ```
 
 ## License
