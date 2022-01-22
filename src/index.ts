@@ -11,7 +11,7 @@ import {
   stopListening,
 } from "./input";
 import { sleep, sleepSync } from "./sleep";
-import { record, Recording } from "./recording";
+import { record, Tape } from "./recording";
 import { Screen } from "./screen";
 
 const Mouse = {
@@ -36,7 +36,7 @@ export {
   sleep,
   sleepSync,
   record,
-  Recording,
+  Tape,
   Screen,
   startListening,
   stopListening,

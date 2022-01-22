@@ -4,6 +4,6 @@ export const sleepSync = (milliseconds: number) => {
   Atomics.wait(view, 0, 0, milliseconds);
 };
 
-export const sleep = (milliseconds: number) => {
+export const sleep = (milliseconds: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };

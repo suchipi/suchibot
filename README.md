@@ -164,19 +164,19 @@ sleepSync(100);
 // call `recording.stop()`, and then you can replay the recording to simulate
 // the same mouse/keyboard events.
 
-// Starts the recording...
-const recording = record();
+// Start the recording...
+const tape = record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
 await sleep(4000);
 
 // Move the mouse around, press keys, etc.
 
-// Now, stop the recording.
-recording.stop();
+// Now, stop recording.
+tape.stop();
 
-// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
-recording.replay();
+// Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+tape.play();
 ```
 
 See the [examples folder](https://github.com/suchipi/suchibot/tree/main/examples) for some example scripts.
@@ -854,61 +854,77 @@ sleepSync(60000);
 
 ### record
 
-This function records all mouse/keyboard inputs so that they can be played back later. Inputs will start being recorded as soon as `record` is called. After some time has passed, call the `stop` function on the `Recording` that gets returned from `record` in order to stop recording input. Then, to replay those inputs, call the `replay` function on the `Recording`.
+This function records all mouse/keyboard inputs so that they can be played back later. Inputs will start being recorded as soon as `record` is called. After some time has passed, call the `stop` function on the `Tape` that gets returned from `record` in order to stop recording input. Then, to replay those inputs, call the `play` function on the `Tape`.
+
+You can optionally pass an `eventFilter` function that each recorded input event will be passed through; If your event filter function returns true, the event will be saved to the `Tape`. If it returns false, then the event will _not_ be saved to the Tape. This is useful when you are using keyboard keys to start/stop/play recordings, and you don't want events for those keys to end up in the recording.
 
 #### Definition
 
 ```ts
-function record(): Recording;
+function record(options?: {
+  eventFilter?: (event: input.MouseEvent | input.KeyboardEvent) => boolean;
+}): Tape;
 
-// Where `Recording` is:
-type Recording = {
-  stop: () => void;
-  replay: () => void;
+// Where `Tape` is:
+type Tape = {
+  stop(): void;
+  play(): Promise<void>;
+  readonly isRecording: boolean;
+  readonly isPlaying: boolean;
+  readonly length: number;
 };
 ```
 
 #### Example
 
 ```js
-// Start recording...
-const recording = record();
+// Start the recording...
+const tape = record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
 await sleep(4000);
 
-recording.stop();
+// Move the mouse around, press keys, etc.
 
-// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
-recording.replay();
+// Now, stop recording.
+tape.stop();
+
+// Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+tape.play();
 ```
 
-### Recording
+### Tape
 
-This object is returned from the `record` function, and has functions on it that let you stop and re-play the recording. You can use it to capture mouse/keyboard input, and then re-play it (make the same mouse/keyboard actions occur on the computer again).
+This object is returned from the `record` function, and has functions on it that let you stop and re-play the events recorded onto the `Tape`. You can use it to capture mouse/keyboard input, and then re-play it (which makes the same mouse/keyboard actions occur on the computer again).
 
 #### Definition
 
 ```ts
-type Recording = {
-  stop: () => void;
-  replay: () => void;
+type Tape = {
+  stop(): void;
+  play(): Promise<void>; // This Promise resolves once playback has completed
+  readonly isRecording: boolean;
+  readonly isPlaying: boolean;
+  readonly length: number;
 };
 ```
 
 #### Example
 
 ```js
-// Start recording...
-const recording = record();
+// Start the recording...
+const tape = record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
 await sleep(4000);
 
-recording.stop();
+// Move the mouse around, press keys, etc.
 
-// Now, replay the recording, and the mouse and keyboard will do the same things you did during the 4000ms wait.
-recording.replay();
+// Now, stop recording.
+tape.stop();
+
+// Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
+tape.play();
 ```
 
 ### Listener
