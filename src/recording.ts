@@ -69,9 +69,9 @@ export function record({ eventFilter }: RecordOptions = {}): Tape {
 
   let playingDefer: Defer<void> | null = null;
 
-  const timeouts = new Set<ReturnType<typeof setTimeout>>();
+  let timeouts = new Set<ReturnType<typeof setTimeout>>();
 
-  return {
+  const tape = {
     get isRecording() {
       return isRecording;
     },
@@ -156,7 +156,14 @@ export function record({ eventFilter }: RecordOptions = {}): Tape {
 
       playingDefer = new Defer<void>();
 
-      sleep(length + 2).then(playingDefer.resolve, playingDefer.reject);
+      const afterSleep = () => {
+        isPlaying = false;
+        timeouts = new Set<ReturnType<typeof setTimeout>>();
+      };
+
+      sleep(length + 2)
+        .then(afterSleep, afterSleep)
+        .then(playingDefer.resolve, playingDefer.reject);
 
       return playingDefer.promise;
     },
@@ -166,6 +173,8 @@ export function record({ eventFilter }: RecordOptions = {}): Tape {
           clearTimeout(timeout);
         }
       }
+
+      timeouts = new Set<ReturnType<typeof setTimeout>>();
 
       if (isRecording) {
         length = Date.now() - start;
@@ -183,4 +192,6 @@ export function record({ eventFilter }: RecordOptions = {}): Tape {
       isRecording = false;
     },
   };
+
+  return tape;
 }
