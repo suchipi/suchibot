@@ -21,7 +21,7 @@ export type KeyboardEventFilter = {
 };
 
 export function mouseEventFilter(
-  criteria: Omit<MouseEventFilter, "filterType">
+  criteria: Omit<MouseEventFilter, "filterType"> = {}
 ): MouseEventFilter {
   return {
     filterType: "Mouse",
@@ -30,7 +30,7 @@ export function mouseEventFilter(
 }
 
 export function keyboardEventFilter(
-  criteria: Omit<KeyboardEventFilter, "filterType">
+  criteria: Omit<KeyboardEventFilter, "filterType"> = {}
 ): KeyboardEventFilter {
   return {
     filterType: "Keyboard",

@@ -32,25 +32,33 @@ const Keyboard = {
   ...input.Keyboard,
 };
 
+// prettier-ignore
 export {
   Mouse,
   Keyboard,
-  Key,
+
   MouseButton,
+  Key,
+
   MouseEvent,
   KeyboardEvent,
   isKeyboardEvent,
   isMouseEvent,
+  
   sleep,
   sleepSync,
-  Tape,
+  
   Screen,
+  
   startListening,
   stopListening,
-  SerializedTape,
+
   KeyboardEventFilter,
   MouseEventFilter,
   eventMatchesFilter,
   keyboardEventFilter,
   mouseEventFilter,
+
+  Tape,
+  SerializedTape,
 };

@@ -27,8 +27,8 @@ export class Tape {
   private [PLAYER]: TapePlayer;
 
   constructor(
-    data: TapeData,
-    eventsToIgnore: Array<KeyboardEventFilter | MouseEventFilter>
+    eventsToIgnore: Array<KeyboardEventFilter | MouseEventFilter> = [],
+    data: TapeData = new TapeData([])
   ) {
     this[DATA] = data;
     this[EVENTS_TO_IGNORE] = eventsToIgnore;
@@ -102,8 +102,8 @@ export class Tape {
 
   static deserialize(serialized: SerializedTape): Tape {
     return new Tape(
-      TapeData.deserialize(serialized.data),
-      serialized.eventsToIgnore
+      serialized.eventsToIgnore,
+      TapeData.deserialize(serialized.data)
     );
   }
 }

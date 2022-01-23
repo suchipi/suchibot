@@ -87,7 +87,7 @@ import {
   Screen,
   sleep,
   sleepSync,
-  record,
+  Tape,
 } from "suchibot";
 
 // `Mouse` contains functions for capturing and simulating mouse events, eg:
@@ -160,12 +160,13 @@ await sleep(100);
 // `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
 sleepSync(100);
 
-// `record` records all the mouse/keyboard events that happen until you
-// call `recording.stop()`, and then you can replay the recording to simulate
+// `Tape`s records all the mouse/keyboard events that happen until you
+// call `tape.stopRecording()`, and then you can replay the tape to simulate
 // the same mouse/keyboard events.
+const tape = new Tape();
 
 // Start the recording...
-const tape = record();
+tape.record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
 await sleep(4000);
@@ -173,7 +174,7 @@ await sleep(4000);
 // Move the mouse around, press keys, etc.
 
 // Now, stop recording.
-tape.stop();
+tape.stopRecording();
 
 // Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
 tape.play();
@@ -852,68 +853,40 @@ sleepSync(1000);
 sleepSync(60000);
 ```
 
-### record
-
-This function records all mouse/keyboard inputs so that they can be played back later. Inputs will start being recorded as soon as `record` is called. After some time has passed, call the `stop` function on the `Tape` that gets returned from `record` in order to stop recording input. Then, to replay those inputs, call the `play` function on the `Tape`.
-
-You can optionally pass an `eventFilter` function that each recorded input event will be passed through; If your event filter function returns true, the event will be saved to the `Tape`. If it returns false, then the event will _not_ be saved to the Tape. This is useful when you are using keyboard keys to start/stop/play recordings, and you don't want events for those keys to end up in the recording.
-
-#### Definition
-
-```ts
-function record(options?: {
-  eventFilter?: (event: input.MouseEvent | input.KeyboardEvent) => boolean;
-}): Tape;
-
-// Where `Tape` is:
-type Tape = {
-  stop(): void;
-  play(): Promise<void>;
-  readonly isRecording: boolean;
-  readonly isPlaying: boolean;
-  readonly length: number;
-};
-```
-
-#### Example
-
-```js
-// Start the recording...
-const tape = record();
-
-// We'll take a 4-second recording by waiting 4000ms before calling `stop`.
-await sleep(4000);
-
-// Move the mouse around, press keys, etc.
-
-// Now, stop recording.
-tape.stop();
-
-// Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
-tape.play();
-```
-
 ### Tape
 
-This object is returned from the `record` function, and has functions on it that let you stop and re-play the events recorded onto the `Tape`. You can use it to capture mouse/keyboard input, and then re-play it (which makes the same mouse/keyboard actions occur on the computer again).
+`Tape`s can record all mouse/keyboard inputs so that they can be played back later. Call `tape.record()` to start keeping track of inputs. After some time has passed, call the `stopRecording` function to stop recording inputs. Then, to replay those inputs, call the `play` function on the `Tape`.
+
+You can optionally pass an array of event filters into the `Tape` constructor; any events that match those filters will not be saved onto the recording. This is useful when you are using keyboard keys to start/stop/play recordings, and you don't want events for those keys to end up in the recording.
 
 #### Definition
 
 ```ts
-type Tape = {
-  stop(): void;
-  play(): Promise<void>; // This Promise resolves once playback has completed
-  readonly isRecording: boolean;
-  readonly isPlaying: boolean;
-  readonly length: number;
-};
+class Tape {
+  constructor(
+    eventsToIgnore?: Array<KeyboardEventFilter | MouseEventFilter>
+  ): Tape;
+
+  record(): void;
+  stopRecording(): void;
+
+  play(): Promise<void>; // Promise resolves when playback completes
+  stopPlaying(): void; // Used to stop playback before completion
+
+  serialize(): Object; // Converts the Tape into a JSON-compatible format
+
+  static deserialize(serialized: Object): Tape; // Loads a tape from the serialized format
+}
 ```
 
 #### Example
 
 ```js
+// Make a tape:
+const tape = new Tape();
+
 // Start the recording...
-const tape = record();
+tape.record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
 await sleep(4000);
@@ -921,10 +894,48 @@ await sleep(4000);
 // Move the mouse around, press keys, etc.
 
 // Now, stop recording.
-tape.stop();
+tape.stopRecording();
 
 // Now, replay the tape, and the mouse and keyboard will do the same things you did during the 4000ms wait.
 tape.play();
+```
+
+And, another example demonstrating using event filters to ignore certain events:
+
+```js
+import { keyboardEventFilter, Key, Tape } from "suchibot";
+
+const eventsToIgnore = [
+  keyboardEventFilter({
+    key: Key.SCROLL_LOCK,
+  }),
+];
+
+const tape = new Tape(eventsToIgnore);
+
+// Now, when you record with this tape, any keyboard events with the same key as the one you passed to your filter will not be added to the recording (in this case, Scroll Lock).
+
+// You can make event filters more specific by passing more information into them. To explain, consider the differences between the filters below:
+
+// Matches all keyboard events:
+const allKeyboardEvents = keyboardEventFilter();
+
+// Matches all "down" keyboard events:
+const allKeyDownEvents = keyboardEventFilter({ type: "down" });
+
+// Matches all "up" keyboard events for the Pause/Break key:
+const allPauseBreakUpEvents = keyboardEventFilter({
+  type: "up",
+  key: Key.PAUSE_BREAK,
+});
+
+// Mouse event filters work the same way, but for the properties on `MouseEvent`s:
+
+import { mouseEventFilter, MouseButton } from "suchibot";
+
+const allMouseEvents = mouseEventFilter();
+const allMouseMoves = mouseEventFilter({ type: "move" });
+const allRightClicks = mouseEventFilter({ button: MouseButton.RIGHT });
 ```
 
 ### Listener
@@ -953,6 +964,87 @@ listener.stop();
 
 // Now, you'll no longer see the console.log messages, because the function you
 // passed in to Mouse.onMove isn't being called anymore.
+```
+
+### KeyboardEventFilter, MouseEventFilter, eventMatchesFilter, keyboardEventFilter, and mouseEventFilter
+
+These types and functions are used to work with event filters, which can be passed into the `Tape` constructor to specify events to omit from the tape's recording.
+
+`KeyboardEventFilter` and `MouseEventFilter` (with capitalized first letters) are the object types for filters. `keyboardEventFilter` and `mouseEventFilter` (with lowercase first letters) are builder functions for making filter objects corresponding to those types. `eventMatchesFilter` can be used to check if a `MouseEvent` or `KeyboardEvent` matches a filter.
+
+The properties on a `MouseEventFilter` match those on a `MouseEvent`, and, likewise, the properties on a `KeyboardEventFilter` match those on a `KeyboardEvent`. As such, to identify what properties to create your filter with, you can use console.log to look at the `MouseEvent` or `KeyboardEvent` that you want to filter out (by performing the action and setting up a listener for it, with `Mouse.onDown`, `Keyboard.onUp`, etc).
+
+#### Definition
+
+```ts
+type MouseEventFilter = {
+  filterType: "Mouse";
+  type?: "click" | "down" | "up" | "move";
+  button?: MouseButton;
+  x?: number;
+  y?: number;
+};
+
+type KeyboardEventFilter = {
+  filterType: "Keyboard";
+  type?: "down" | "up";
+  key?: Key;
+};
+
+function keyboardEventFilter(properties?: {
+  type?: "down" | "up";
+  key?: Key;
+}): KeyboardEventFilter;
+
+function mouseEventFilter(properties?: {
+  type?: "click" | "down" | "up" | "move";
+  button?: MouseButton;
+  x?: number;
+  y?: number;
+}): MouseEventFilter;
+
+function eventMatchesFilter(
+  event: MouseEvent | KeyboardEvent,
+  filter: MouseEventFilter | KeyboardEventFilter
+): boolean;
+```
+
+#### Example
+
+```js
+import { keyboardEventFilter, Key, Tape } from "suchibot";
+
+const eventsToIgnore = [
+  keyboardEventFilter({
+    key: Key.SCROLL_LOCK,
+  }),
+];
+
+const tape = new Tape(eventsToIgnore);
+
+// Now, when you record with this tape, any keyboard events with the same key as the one you passed to your filter will not be added to the recording (in this case, Scroll Lock).
+
+// You can make event filters more specific by passing more information into them. To explain, consider the differences between the filters below:
+
+// Matches all keyboard events:
+const allKeyboardEvents = keyboardEventFilter();
+
+// Matches all "down" keyboard events:
+const allKeyDownEvents = keyboardEventFilter({ type: "down" });
+
+// Matches all "up" keyboard events for the Pause/Break key:
+const allPauseBreakUpEvents = keyboardEventFilter({
+  type: "up",
+  key: Key.PAUSE_BREAK,
+});
+
+// Mouse event filters work the same way, but for the properties on `MouseEvent`s:
+
+import { mouseEventFilter, MouseButton } from "suchibot";
+
+const allMouseEvents = mouseEventFilter();
+const allMouseMoves = mouseEventFilter({ type: "move" });
+const allRightClicks = mouseEventFilter({ button: MouseButton.RIGHT });
 ```
 
 ## License

@@ -43,7 +43,9 @@ export class TapePlayer {
           if (input.isMouseEvent(event)) {
             switch (event.type) {
               case "click": {
-                output.Mouse.click(event.button!);
+                // We intentionally don't play these back, because the down/up events will do the same thing.
+                // If we play both down/up and click events, we'll double-click for every single click.
+                // output.Mouse.click(event.button!);
                 break;
               }
               case "down": {
@@ -99,7 +101,7 @@ export class TapePlayer {
       this[TIMEOUTS] = new Set<ReturnType<typeof setTimeout>>();
     };
 
-    sleep(length + 2)
+    sleep((this[DATA].length || 0) + 2)
       .then(afterSleep, afterSleep)
       .then(defer.resolve, defer.reject);
 
