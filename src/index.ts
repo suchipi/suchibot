@@ -11,7 +11,15 @@ import {
   stopListening,
 } from "./input";
 import { sleep, sleepSync } from "./sleep";
-import { record, Tape } from "./recording";
+import {
+  Tape,
+  SerializedTape,
+  KeyboardEventFilter,
+  MouseEventFilter,
+  eventMatchesFilter,
+  keyboardEventFilter,
+  mouseEventFilter,
+} from "./recording";
 import { Screen } from "./screen";
 
 const Mouse = {
@@ -35,9 +43,14 @@ export {
   isMouseEvent,
   sleep,
   sleepSync,
-  record,
   Tape,
   Screen,
   startListening,
   stopListening,
+  SerializedTape,
+  KeyboardEventFilter,
+  MouseEventFilter,
+  eventMatchesFilter,
+  keyboardEventFilter,
+  mouseEventFilter,
 };
