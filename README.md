@@ -863,6 +863,14 @@ You can optionally pass an array of event filters into the `Tape` constructor; a
 
 ```ts
 class Tape {
+  static enum State {
+    RECORDING,
+    PLAYING,
+    IDLE,
+  };
+
+  readonly state: State;
+
   constructor(
     eventsToIgnore?: Array<KeyboardEventFilter | MouseEventFilter>
   ): Tape;

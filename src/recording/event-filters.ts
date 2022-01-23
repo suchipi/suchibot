@@ -5,23 +5,29 @@ import {
   isMouseEvent,
   isKeyboardEvent,
 } from "../input";
+import { MouseButton, Key } from "../types";
 
 export type MouseEventFilter = {
   filterType: "Mouse";
-  type?: MouseEvent["type"];
-  button?: MouseEvent["button"];
+  type?: "click" | "down" | "up" | "move";
+  button?: MouseButton;
   x?: number;
   y?: number;
 };
 
 export type KeyboardEventFilter = {
   filterType: "Keyboard";
-  type?: KeyboardEvent["type"];
-  key?: KeyboardEvent["key"];
+  type?: "down" | "up";
+  key?: Key;
 };
 
 export function mouseEventFilter(
-  criteria: Omit<MouseEventFilter, "filterType"> = {}
+  criteria: {
+    type?: "click" | "down" | "up" | "move";
+    button?: MouseButton;
+    x?: number;
+    y?: number;
+  } = {}
 ): MouseEventFilter {
   return {
     filterType: "Mouse",
@@ -30,7 +36,10 @@ export function mouseEventFilter(
 }
 
 export function keyboardEventFilter(
-  criteria: Omit<KeyboardEventFilter, "filterType"> = {}
+  criteria: {
+    type?: "down" | "up";
+    key?: Key;
+  } = {}
 ): KeyboardEventFilter {
   return {
     filterType: "Keyboard",
@@ -48,7 +57,7 @@ function mouseEventMatchesFilter(
     doesMatch = doesMatch && filter.type === event.type;
   }
 
-  if (filter.button != null) {
+  if (filter.button != null && filter.button !== MouseButton.ANY) {
     doesMatch = doesMatch && filter.button === event.button;
   }
 
@@ -73,7 +82,7 @@ function keyboardEventMatchesFilter(
     doesMatch = doesMatch && filter.type === event.type;
   }
 
-  if (filter.key != null) {
+  if (filter.key != null && filter.key !== Key.ANY) {
     doesMatch = doesMatch && filter.key === event.key;
   }
 
