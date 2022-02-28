@@ -5,7 +5,6 @@ import * as output from "../output";
 import { TapeData } from "./tape-data";
 import { Defer } from "../defer";
 import { formatError } from "../format-error";
-import { sleep } from "../sleep";
 
 const DATA = Symbol("DATA");
 const IS_PLAYING = Symbol("IS_PLAYING");
@@ -101,11 +100,12 @@ export class TapePlayer {
       this[TIMEOUTS] = new Set<ReturnType<typeof setTimeout>>();
     };
 
-    sleep((this[DATA].length || 0) + 2)
-      .then(afterSleep, afterSleep)
-      .then(defer.resolve, defer.reject);
+    const timeToSleep = (this[DATA].length || 0) + 2;
 
-    return defer.promise;
+    const sleepTimeout = setTimeout(defer.resolve, timeToSleep);
+    this[TIMEOUTS].add(sleepTimeout);
+
+    return defer.promise.then(afterSleep, afterSleep);
   }
 
   stop() {

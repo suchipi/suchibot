@@ -8,15 +8,20 @@ export type RecordedAction = {
 
 export class TapeData {
   actions: Array<RecordedAction>;
-  length: number | null;
+
+  get length(): number {
+    const { actions } = this;
+
+    if (actions.length > 0) {
+      const lastAction = actions[actions.length - 1];
+      return lastAction.time;
+    } else {
+      return 0;
+    }
+  }
 
   constructor(actions: Array<RecordedAction>) {
     this.actions = actions;
-    if (actions.length > 0) {
-      this.length = actions[actions.length - 1].time;
-    } else {
-      this.length = null;
-    }
   }
 
   static deserialize(data: SerializedTapeData) {

@@ -90,6 +90,9 @@ export class Tape {
 
     const promise = this[PLAYER].play();
     this[CURRENT_STATE] = TapeState.PLAYING;
+    promise.then(() => {
+      this[CURRENT_STATE] = TapeState.IDLE;
+    });
     return promise;
   }
   stopPlaying() {
