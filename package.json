@@ -18,7 +18,7 @@
     "auto",
     "automated"
   ],
-  "author": "Lily Scott <me@suchipi.com>",
+  "author": "Lily Skye <me@suchipi.com>",
   "license": "MIT",
   "dependencies": {
     "@nut-tree/libnut": "^2.1.5-next.20220117230646",
