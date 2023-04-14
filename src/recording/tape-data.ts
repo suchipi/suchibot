@@ -1,4 +1,3 @@
-#!/usr/bin/env suchibot
 import { MouseEvent, KeyboardEvent, isMouseEvent } from "../input";
 
 export type RecordedAction = {

@@ -1,4 +1,3 @@
-#!/usr/bin/env suchibot
 import { MouseEvent, KeyboardEvent, Mouse, Keyboard } from "../input";
 import {
   MouseEventFilter,

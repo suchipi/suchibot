@@ -1,4 +1,3 @@
-#!/usr/bin/env suchibot
 import { SerializedTapeData, TapeData } from "./tape-data";
 import { TapePlayer } from "./tape-player";
 import { TapeRecorder } from "./tape-recorder";

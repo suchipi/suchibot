@@ -1,10 +1,9 @@
-#!/usr/bin/env suchibot
 import kleur from "kleur";
+import Defer from "@suchipi/defer";
+import { formatError } from "pretty-print-error";
 import * as input from "../input";
 import * as output from "../output";
 import { TapeData } from "./tape-data";
-import Defer from "@suchipi/defer";
-import { formatError } from "../format-error";
 
 const DATA = Symbol("DATA");
 const IS_PLAYING = Symbol("IS_PLAYING");

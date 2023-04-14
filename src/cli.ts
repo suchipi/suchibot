@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import kleur from "kleur";
-import { formatError } from "./format-error";
+import { formatError } from "pretty-print-error";
 
 // @ts-ignore
 import pkgJson from "../package.json";
