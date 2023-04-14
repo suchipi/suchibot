@@ -3,7 +3,7 @@ import kleur from "kleur";
 import * as input from "../input";
 import * as output from "../output";
 import { TapeData } from "./tape-data";
-import { Defer } from "../defer";
+import Defer from "@suchipi/defer";
 import { formatError } from "../format-error";
 
 const DATA = Symbol("DATA");
