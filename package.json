@@ -21,7 +21,7 @@
   "author": "Lily Skye <me@suchipi.com>",
   "license": "MIT",
   "dependencies": {
-    "@nut-tree/libnut": "^2.1.5-next.20220117230646",
+    "@nut-tree/libnut": "^2.5.1",
     "@suchipi/defer": "^1.0.0",
     "kame": "^0.8.0",
     "kleur": "^4.1.4",
