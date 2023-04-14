@@ -34,6 +34,8 @@ const uioToMouseButtonMap = {
   1: MouseButton.LEFT,
   2: MouseButton.MIDDLE,
   3: MouseButton.RIGHT,
+  4: MouseButton.MOUSE4,
+  5: MouseButton.MOUSE5,
 };
 
 function uioToMouseButton(uioButton: number): MouseButton | null {

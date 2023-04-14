@@ -8,6 +8,8 @@ const mouseButtonToNutMap: {
   LEFT: "left",
   RIGHT: "right",
   MIDDLE: "middle",
+  MOUSE4: null,
+  MOUSE5: null,
 
   ANY: null,
 };

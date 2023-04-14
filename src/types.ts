@@ -146,6 +146,8 @@ export const MouseButton = {
   LEFT: "LEFT" as MouseButton,
   RIGHT: "RIGHT" as MouseButton,
   MIDDLE: "MIDDLE" as MouseButton,
+  MOUSE4: "MOUSE4" as MouseButton,
+  MOUSE5: "MOUSE5" as MouseButton,
 
   ANY: "ANY" as MouseButton,
 };
