@@ -1,6 +1,6 @@
 import { Key } from "../types";
 import * as libnut from "@nut-tree/libnut";
-import { sleepSync } from "../sleep";
+import { sleep } from "a-mimir";
 
 const keyToNutMap: { [key in keyof typeof Key]: string | null } = {
   BACKSPACE: "backspace",
@@ -162,7 +162,7 @@ export const Keyboard = {
     const nutKey = keyToNut(key);
 
     libnut.keyToggle(nutKey, "down");
-    sleepSync(10);
+    sleep.sync(10);
     libnut.keyToggle(nutKey, "up");
   },
 
@@ -180,7 +180,7 @@ export const Keyboard = {
     textToType.split("").forEach((char, index, all) => {
       libnut.typeString(char);
       if (index != all.length - 1) {
-        sleepSync(delayBetweenKeyPresses);
+        sleep.sync(delayBetweenKeyPresses);
       }
     });
   },

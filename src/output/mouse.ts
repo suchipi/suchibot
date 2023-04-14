@@ -1,6 +1,6 @@
 import { MouseButton } from "../types";
 import * as libnut from "@nut-tree/libnut";
-import { sleepSync } from "../sleep";
+import { sleep } from "a-mimir";
 
 const mouseButtonToNutMap: {
   [key in keyof typeof MouseButton]: string | null;
@@ -39,18 +39,18 @@ export const Mouse = {
     const nutButton = mouseButtonToNut(button);
 
     libnut.mouseToggle("down", nutButton);
-    sleepSync(4);
+    sleep.sync(4);
     libnut.mouseToggle("up", nutButton);
   },
   doubleClick(button: MouseButton = MouseButton.LEFT) {
     const nutButton = mouseButtonToNut(button);
 
     libnut.mouseToggle("down", nutButton);
-    sleepSync(4);
+    sleep.sync(4);
     libnut.mouseToggle("up", nutButton);
-    sleepSync(4);
+    sleep.sync(4);
     libnut.mouseToggle("down", nutButton);
-    sleepSync(4);
+    sleep.sync(4);
     libnut.mouseToggle("up", nutButton);
   },
   hold(button: MouseButton = MouseButton.LEFT) {

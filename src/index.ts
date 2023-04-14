@@ -10,7 +10,6 @@ import {
   startListening,
   stopListening,
 } from "./input";
-import { sleep, sleepSync } from "./sleep";
 import {
   Tape,
   SerializedTape,
@@ -31,6 +30,17 @@ const Keyboard = {
   ...output.Keyboard,
   ...input.Keyboard,
 };
+
+import { sleep as mimir } from "a-mimir";
+
+// This is callable for backwards-compatibility. sleep.async or sleep.sync is preferred over calling this directly
+const sleep = Object.assign(
+  (milliseconds: number) => mimir.async(milliseconds),
+  mimir
+);
+
+// sleep.sync is preferred, but this is here for backwards-compatibility
+const sleepSync = mimir.sync;
 
 // prettier-ignore
 export {

@@ -40,7 +40,7 @@ import { Keyboard, Mouse, Key, MouseButton, sleep } from "suchibot";
 
 Keyboard.onDown(Key.NUMPAD_0, async () => {
   Mouse.click(MouseButton.LEFT);
-  await sleep(100);
+  await sleep.async(100);
   Keyboard.tap(Key.NINE);
 });
 ```
@@ -86,7 +86,6 @@ import {
   MouseButton,
   Screen,
   sleep,
-  sleepSync,
   Tape,
 } from "suchibot";
 
@@ -154,11 +153,11 @@ const { width, height } = await Screen.getSize();
 console.log(Screen);
 // { getSize: [Function: getSize] }
 
-// `sleep` returns a Promise that resolves in the specified number of milliseconds. eg:
-await sleep(100);
+// `sleep.async` returns a Promise that resolves in the specified number of milliseconds. eg:
+await sleep.async(100);
 
-// `sleepSync` blocks the main thread for the specified number of milliseconds. eg:
-sleepSync(100);
+// `sleep.sync` blocks the main thread for the specified number of milliseconds. eg:
+sleep.sync(100);
 
 // `Tape`s records all the mouse/keyboard events that happen until you
 // call `tape.stopRecording()`, and then you can replay the tape to simulate
@@ -169,7 +168,7 @@ const tape = new Tape();
 tape.record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
-await sleep(4000);
+await sleep.async(4000);
 
 // Move the mouse around, press keys, etc.
 
@@ -795,7 +794,7 @@ Call this function to stop listening for input events. This will make functions 
 
 Generally, you don't need to call this, as you can stop your script at any time by pressing Ctrl+C in the terminal window where it's running.
 
-### sleep
+### sleep.async
 
 This function returns a Promise that resolves in the specified number of milliseconds. You can use it to wait for an amount of time before running the next part of your code.
 
@@ -804,7 +803,7 @@ This function works best when used with the `await` keyword. The `await` keyword
 #### Definition
 
 ```ts
-function sleep(milliseconds: number): Promise<void>;
+function async(milliseconds: number): Promise<void>;
 ```
 
 #### Example
@@ -814,43 +813,45 @@ function sleep(milliseconds: number): Promise<void>;
 Mouse.onClick(MouseButton.LEFT, async () => {
   Keyboard.tap(Keys.H);
   // Wait 100ms. Note that you have to write `await` here.
-  await sleep(100);
+  await sleep.async(100);
 
-  // After waiting 100ms, the code underneath the `await sleep` line will run.
+  // After waiting 100ms, the code underneath the `await sleep.async` line will run.
   Keyboard.tap(Keys.I);
 });
 
-// If you need to use sleep in a non-async function, you can use the `then` method on the Promise it returns:
+// If you need to use sleep.async in a non-async function, you can use the `then` method on the Promise it returns:
 
 console.log("This prints now");
-sleep(1000).then(() => {
+sleep.async(1000).then(() => {
   console.log("This prints 1 second later");
 });
 ```
 
-### sleepSync
+### sleep.sync
 
 This function pauses execution (blocking the main thread) for the specified number of milliseconds.
 
-Note that, if this function is used, no processing will occur until the specified amount of time has passed; notably, other mouse/keyboard events will not be processed. To avoid this issue, use `sleep` (not `sleepSync`) inside of an `async` function.
+Note that, if this function is used, no processing will occur until the specified amount of time has passed; notably, other mouse/keyboard events will not be processed. That means that those events will not be written to any `Tape`s that are recording. To avoid this issue, use `sleep.async` (instead of `sleep.sync`) inside of an `async` function.
+
+> tl;dr use `sleep.async` instead unless you understand what you are doing
 
 #### Definition
 
 ```ts
-function sleepSync(milliseconds: number): void;
+function sync(milliseconds: number): void;
 ```
 
 #### Example
 
 ```js
 // pauses everything for 100ms
-sleepSync(100);
+sleep.sync(100);
 
 // pause everything for 1 second
-sleepSync(1000);
+sleep.sync(1000);
 
 // pause everything for 1 minute
-sleepSync(60000);
+sleep.sync(60000);
 ```
 
 ### Tape
@@ -897,7 +898,7 @@ const tape = new Tape();
 tape.record();
 
 // We'll take a 4-second recording by waiting 4000ms before calling `stop`.
-await sleep(4000);
+await sleep.async(4000);
 
 // Move the mouse around, press keys, etc.
 
