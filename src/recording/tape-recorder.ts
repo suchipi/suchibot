@@ -58,6 +58,7 @@ export class TapeRecorder {
   }
 
   private [PUSH_EVENT](event: MouseEvent | KeyboardEvent) {
+    const now = Date.now();
     let shouldPush = true;
 
     for (const filter of this[EVENTS_TO_IGNORE]) {
@@ -67,7 +68,7 @@ export class TapeRecorder {
     if (shouldPush) {
       this[DATA].actions.push({
         event,
-        time: Date.now() - this[RECORDING_STARTED_AT],
+        time: now - this[RECORDING_STARTED_AT],
       });
     }
   }
