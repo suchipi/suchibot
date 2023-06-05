@@ -6,6 +6,7 @@ import {
   MouseEvent,
   KeyboardEvent,
   KeyboardModifierKeysState,
+  MouseButtonsState,
   isKeyboardEvent,
   isMouseEvent,
   startListening,
@@ -54,6 +55,7 @@ export {
   MouseEvent,
   KeyboardEvent,
   KeyboardModifierKeysState,
+  MouseButtonsState,
   isKeyboardEvent,
   isMouseEvent,
   
