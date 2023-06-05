@@ -5,6 +5,7 @@ import { Key, MouseButton } from "./types";
 import {
   MouseEvent,
   KeyboardEvent,
+  KeyboardModifierKeysState,
   isKeyboardEvent,
   isMouseEvent,
   startListening,
@@ -52,6 +53,7 @@ export {
 
   MouseEvent,
   KeyboardEvent,
+  KeyboardModifierKeysState,
   isKeyboardEvent,
   isMouseEvent,
   

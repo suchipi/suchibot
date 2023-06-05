@@ -1,6 +1,11 @@
 import { uIOhook } from "uiohook-napi";
 import { Mouse, MouseEvent, isMouseEvent } from "./mouse";
-import { Keyboard, KeyboardEvent, isKeyboardEvent } from "./keyboard";
+import {
+  Keyboard,
+  KeyboardEvent,
+  KeyboardModifierKeysState,
+  isKeyboardEvent,
+} from "./keyboard";
 
 export {
   Mouse,
@@ -8,6 +13,7 @@ export {
   isMouseEvent,
   Keyboard,
   KeyboardEvent,
+  KeyboardModifierKeysState,
   isKeyboardEvent,
 };
 

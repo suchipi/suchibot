@@ -9,15 +9,93 @@ export function isKeyboardEvent(event: any): event is KeyboardEvent {
   return typeof event === "object" && event != null && event[IS_KEYBOARD_EVENT];
 }
 
+const modifierKeysToTrack = new Set([
+  Key.LEFT_ALT,
+  Key.LEFT_CONTROL,
+  Key.LEFT_SHIFT,
+  Key.LEFT_SUPER,
+  Key.RIGHT_ALT,
+  Key.RIGHT_CONTROL,
+  Key.RIGHT_SHIFT,
+  Key.RIGHT_SUPER,
+]);
+const modifierKeyState: { [key: Key]: boolean } = Array.from(
+  modifierKeysToTrack
+).reduce((obj, key) => {
+  obj[key] = false;
+  return obj;
+}, {});
+
+function makeModifierKeysObj(): KeyboardModifierKeysState {
+  return {
+    alt: modifierKeyState[Key.LEFT_ALT] || modifierKeyState[Key.RIGHT_ALT],
+    control:
+      modifierKeyState[Key.LEFT_CONTROL] || modifierKeyState[Key.RIGHT_CONTROL],
+    shift:
+      modifierKeyState[Key.LEFT_SHIFT] || modifierKeyState[Key.RIGHT_SHIFT],
+    super:
+      modifierKeyState[Key.LEFT_SUPER] || modifierKeyState[Key.RIGHT_SUPER],
+    windows:
+      modifierKeyState[Key.LEFT_WINDOWS] || modifierKeyState[Key.RIGHT_WINDOWS],
+    command:
+      modifierKeyState[Key.LEFT_COMMAND] || modifierKeyState[Key.RIGHT_COMMAND],
+    meta: modifierKeyState[Key.LEFT_META] || modifierKeyState[Key.RIGHT_META],
+
+    leftAlt: modifierKeyState[Key.LEFT_ALT],
+    leftControl: modifierKeyState[Key.LEFT_CONTROL],
+    leftShift: modifierKeyState[Key.LEFT_SHIFT],
+    leftSuper: modifierKeyState[Key.LEFT_SUPER],
+    leftWindows: modifierKeyState[Key.LEFT_WINDOWS],
+    leftCommand: modifierKeyState[Key.LEFT_COMMAND],
+    leftMeta: modifierKeyState[Key.LEFT_META],
+
+    rightAlt: modifierKeyState[Key.RIGHT_ALT],
+    rightControl: modifierKeyState[Key.RIGHT_CONTROL],
+    rightShift: modifierKeyState[Key.RIGHT_SHIFT],
+    rightSuper: modifierKeyState[Key.RIGHT_SUPER],
+    rightWindows: modifierKeyState[Key.RIGHT_WINDOWS],
+    rightCommand: modifierKeyState[Key.RIGHT_COMMAND],
+    rightMeta: modifierKeyState[Key.RIGHT_META],
+  };
+}
+
+export type KeyboardModifierKeysState = {
+  alt: boolean;
+  control: boolean;
+  shift: boolean;
+  super: boolean;
+  windows: boolean;
+  command: boolean;
+  meta: boolean;
+
+  leftAlt: boolean;
+  leftControl: boolean;
+  leftShift: boolean;
+  leftSuper: boolean;
+  leftWindows: boolean;
+  leftCommand: boolean;
+  leftMeta: boolean;
+
+  rightAlt: boolean;
+  rightControl: boolean;
+  rightShift: boolean;
+  rightSuper: boolean;
+  rightWindows: boolean;
+  rightCommand: boolean;
+  rightMeta: boolean;
+};
+
 export class KeyboardEvent {
   type: "down" | "up";
   key: Key;
+  modifierKeys: KeyboardModifierKeysState;
   [IS_KEYBOARD_EVENT]: true;
 
   constructor(type: "down" | "up", key: Key) {
     this.type = type;
     this.key = key;
     this[IS_KEYBOARD_EVENT] = true;
+    this.modifierKeys = makeModifierKeysObj();
   }
 }
 
@@ -165,6 +243,10 @@ uIOhook.on("keydown", (event) => {
     return;
   }
 
+  if (modifierKeysToTrack.has(key)) {
+    modifierKeyState[key] = true;
+  }
+
   const newEvent = new KeyboardEvent("down", key);
   events.emit("keydown", newEvent);
 });
@@ -177,6 +259,10 @@ uIOhook.on("keyup", (event) => {
       event.keycode
     );
     return;
+  }
+
+  if (modifierKeysToTrack.has(key)) {
+    modifierKeyState[key] = false;
   }
 
   const newEvent = new KeyboardEvent("up", key);

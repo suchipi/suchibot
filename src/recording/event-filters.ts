@@ -1,6 +1,7 @@
 import {
   MouseEvent,
   KeyboardEvent,
+  KeyboardModifierKeysState,
   isMouseEvent,
   isKeyboardEvent,
 } from "../input";
@@ -18,6 +19,7 @@ export type KeyboardEventFilter = {
   filterType: "Keyboard";
   type?: "down" | "up";
   key?: Key;
+  modifierKeys?: Partial<KeyboardModifierKeysState>;
 };
 
 export function mouseEventFilter(
@@ -38,6 +40,7 @@ export function keyboardEventFilter(
   criteria: {
     type?: "down" | "up";
     key?: Key;
+    modifierKeys?: Partial<KeyboardModifierKeysState>;
   } = {}
 ): KeyboardEventFilter {
   return {
@@ -83,6 +86,19 @@ function keyboardEventMatchesFilter(
 
   if (filter.key != null && filter.key !== Key.ANY) {
     doesMatch = doesMatch && filter.key === event.key;
+  }
+
+  if (doesMatch && filter.modifierKeys != null) {
+    for (const key in filter.modifierKeys) {
+      if (Object.prototype.hasOwnProperty.call(filter.modifierKeys, key)) {
+        doesMatch =
+          doesMatch && event.modifierKeys[key] === filter.modifierKeys[key];
+
+        if (!doesMatch) {
+          break;
+        }
+      }
+    }
   }
 
   return doesMatch;
