@@ -1,6 +1,14 @@
 import { Key, Listener } from "../types";
 import { uIOhook, UiohookKey } from "uiohook-napi";
 import mitt, { Emitter } from "mitt";
+import {
+  setKeyState,
+  isKeyDown,
+  isKeyUp,
+  KeyboardModifierKeysState,
+  getModifierKeysState,
+} from "./held-keys";
+import { MouseButtonsState, getMouseButtonsState } from "./held-mouse-buttons";
 
 // ------------ keyboard stuff -------------
 const IS_KEYBOARD_EVENT = Symbol("IS_KEYBOARD_EVENT");
@@ -9,88 +17,24 @@ export function isKeyboardEvent(event: any): event is KeyboardEvent {
   return typeof event === "object" && event != null && event[IS_KEYBOARD_EVENT];
 }
 
-const heldKeys = new Map<Key, boolean>();
-
-function getModifierKeysState(): KeyboardModifierKeysState {
-  const leftAlt = Boolean(heldKeys.get(Key.LEFT_ALT));
-  const leftControl = Boolean(heldKeys.get(Key.LEFT_CONTROL));
-  const leftShift = Boolean(heldKeys.get(Key.LEFT_SHIFT));
-  const leftSuper = Boolean(heldKeys.get(Key.LEFT_SUPER));
-
-  const rightAlt = Boolean(heldKeys.get(Key.RIGHT_ALT));
-  const rightControl = Boolean(heldKeys.get(Key.RIGHT_CONTROL));
-  const rightShift = Boolean(heldKeys.get(Key.RIGHT_SHIFT));
-  const rightSuper = Boolean(heldKeys.get(Key.RIGHT_SUPER));
-
-  const alt = leftAlt || rightAlt;
-  const control = leftControl || rightControl;
-  const shift = leftShift || rightShift;
-  const super_ = leftSuper || rightSuper;
-
-  return {
-    alt,
-    control,
-    shift,
-    super: super_,
-    windows: super_,
-    command: super_,
-    meta: super_,
-
-    leftAlt,
-    leftControl,
-    leftShift,
-    leftSuper,
-    leftWindows: leftSuper,
-    leftCommand: leftSuper,
-    leftMeta: leftSuper,
-
-    rightAlt,
-    rightControl,
-    rightShift,
-    rightSuper,
-    rightWindows: rightSuper,
-    rightCommand: rightSuper,
-    rightMeta: rightSuper,
-  };
-}
-
-export type KeyboardModifierKeysState = {
-  alt: boolean;
-  control: boolean;
-  shift: boolean;
-  super: boolean;
-  windows: boolean;
-  command: boolean;
-  meta: boolean;
-
-  leftAlt: boolean;
-  leftControl: boolean;
-  leftShift: boolean;
-  leftSuper: boolean;
-  leftWindows: boolean;
-  leftCommand: boolean;
-  leftMeta: boolean;
-
-  rightAlt: boolean;
-  rightControl: boolean;
-  rightShift: boolean;
-  rightSuper: boolean;
-  rightWindows: boolean;
-  rightCommand: boolean;
-  rightMeta: boolean;
-};
-
 export class KeyboardEvent {
   type: "down" | "up";
   key: Key;
   modifierKeys: KeyboardModifierKeysState;
+  mouseButtons: MouseButtonsState;
   [IS_KEYBOARD_EVENT]: true;
 
-  constructor(type: "down" | "up", key: Key) {
+  constructor(
+    type: "down" | "up",
+    key: Key,
+    modifierKeys: KeyboardModifierKeysState = getModifierKeysState(),
+    mouseButtons: MouseButtonsState = getMouseButtonsState()
+  ) {
     this.type = type;
     this.key = key;
+    this.modifierKeys = modifierKeys;
+    this.mouseButtons = mouseButtons;
     this[IS_KEYBOARD_EVENT] = true;
-    this.modifierKeys = getModifierKeysState();
   }
 }
 
@@ -238,7 +182,7 @@ uIOhook.on("keydown", (event) => {
     return;
   }
 
-  heldKeys.set(key, true);
+  setKeyState(key, "down");
 
   const newEvent = new KeyboardEvent("down", key);
   events.emit("keydown", newEvent);
@@ -254,7 +198,7 @@ uIOhook.on("keyup", (event) => {
     return;
   }
 
-  heldKeys.set(key, false);
+  setKeyState(key, "up");
 
   const newEvent = new KeyboardEvent("up", key);
   events.emit("keyup", newEvent);
@@ -293,28 +237,10 @@ export const Keyboard = {
   },
 
   isDown(key: Key): boolean {
-    if (key === Key.ANY) {
-      for (const [_key, isDown] of heldKeys) {
-        if (isDown) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return Boolean(heldKeys.get(key));
-    }
+    return isKeyDown(key);
   },
 
   isUp(key: Key): boolean {
-    if (key === Key.ANY) {
-      for (const [_key, isDown] of heldKeys) {
-        if (!isDown) {
-          return true;
-        }
-      }
-      return false;
-    } else {
-      return !heldKeys.get(key);
-    }
+    return isKeyUp(key);
   },
 };

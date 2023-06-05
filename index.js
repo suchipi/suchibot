@@ -15,5 +15,6 @@ module.exports = suchibot;
 if (module === require.main) {
   runtime.cache[__filename] = module;
   const { main } = runtime.load(path.join(__dirname, "src", "cli.ts"));
+  Object.assign(globalThis, suchibot);
   main(suchibot);
 }

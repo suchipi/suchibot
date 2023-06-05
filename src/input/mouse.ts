@@ -1,6 +1,14 @@
 import { MouseButton, Listener } from "../types";
 import { uIOhook } from "uiohook-napi";
 import mitt, { Emitter } from "mitt";
+import { getModifierKeysState, KeyboardModifierKeysState } from "./held-keys";
+import {
+  setButtonState,
+  isButtonDown,
+  isButtonUp,
+  getMouseButtonsState,
+  MouseButtonsState,
+} from "./held-mouse-buttons";
 
 // ------------ mouse stuff -------------
 const IS_MOUSE_EVENT = Symbol("IS_MOUSE_EVENT");
@@ -14,18 +22,24 @@ export class MouseEvent {
   button: MouseButton | null;
   x: number;
   y: number;
+  modifierKeys: KeyboardModifierKeysState;
+  mouseButtons: MouseButtonsState;
   [IS_MOUSE_EVENT]: true;
 
   constructor(
     type: "click" | "down" | "up" | "move",
     button: MouseButton | null,
     x: number,
-    y: number
+    y: number,
+    modifierKeys: KeyboardModifierKeysState = getModifierKeysState(),
+    mouseButtons: MouseButtonsState = getMouseButtonsState()
   ) {
     this.type = type;
     this.button = button;
     this.x = x;
     this.y = y;
+    this.modifierKeys = modifierKeys;
+    this.mouseButtons = mouseButtons;
     this[IS_MOUSE_EVENT] = true;
   }
 }
@@ -62,6 +76,8 @@ uIOhook.on("click", (event) => {
     return;
   }
 
+  setButtonState(button, "up");
+
   const newEvent = new MouseEvent("click", button, event.x, event.y);
   events.emit("click", newEvent);
 });
@@ -76,6 +92,8 @@ uIOhook.on("mousedown", (event) => {
     return;
   }
 
+  setButtonState(button, "down");
+
   const newEvent = new MouseEvent("down", button, event.x, event.y);
   events.emit("mousedown", newEvent);
 });
@@ -89,6 +107,8 @@ uIOhook.on("mouseup", (event) => {
     );
     return;
   }
+
+  setButtonState(button, "up");
 
   const newEvent = new MouseEvent("up", button, event.x, event.y);
   events.emit("mouseup", newEvent);
@@ -168,5 +188,13 @@ export const Mouse = {
         events.off("mousemove", callback);
       },
     };
+  },
+
+  isDown(button: MouseButton) {
+    return isButtonDown(button);
+  },
+
+  isUp(button: MouseButton) {
+    return isButtonUp(button);
   },
 };
