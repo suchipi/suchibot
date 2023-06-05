@@ -1,22 +1,27 @@
 #!/usr/bin/env suchibot
-import {
-  Keyboard,
-  Key,
-  Tape,
-  keyboardEventFilter,
-  eventMatchesFilter,
-} from "./index";
+import { Keyboard, Key } from "./index";
 
-const filter = keyboardEventFilter({
-  type: "down",
-  key: Key.A,
-  modifierKeys: {
-    shift: true,
-  },
+Keyboard.onDown(Key.A, (event) => {
+  if (Keyboard.isDown(Key.LEFT_SHIFT)) {
+    console.log("left shift a");
+  }
+  if (Keyboard.isDown(Key.RIGHT_SHIFT)) {
+    console.log("right shift a");
+  }
+  if (Keyboard.isDown(Key.LEFT_SHIFT) || Keyboard.isDown(Key.RIGHT_SHIFT)) {
+    console.log("(either left or right) shift a");
+  }
 });
 
-Keyboard.onDown(Key.ANY, (event) => {
-  if (eventMatchesFilter(event, filter)) {
-    console.log("Shift A down!");
+// easier way to check modifier keys since they're commonly used:
+Keyboard.onDown(Key.A, (event) => {
+  if (event.modifierKeys.leftShift) {
+    console.log("left shift a");
+  }
+  if (event.modifierKeys.rightShift) {
+    console.log("right shift a");
+  }
+  if (event.modifierKeys.shift) {
+    console.log("(either left or right) shift a");
   }
 });

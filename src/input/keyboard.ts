@@ -9,53 +9,48 @@ export function isKeyboardEvent(event: any): event is KeyboardEvent {
   return typeof event === "object" && event != null && event[IS_KEYBOARD_EVENT];
 }
 
-const modifierKeysToTrack = new Set([
-  Key.LEFT_ALT,
-  Key.LEFT_CONTROL,
-  Key.LEFT_SHIFT,
-  Key.LEFT_SUPER,
-  Key.RIGHT_ALT,
-  Key.RIGHT_CONTROL,
-  Key.RIGHT_SHIFT,
-  Key.RIGHT_SUPER,
-]);
-const modifierKeyState: { [key: Key]: boolean } = Array.from(
-  modifierKeysToTrack
-).reduce((obj, key) => {
-  obj[key] = false;
-  return obj;
-}, {});
+const heldKeys = new Map<Key, boolean>();
 
-function makeModifierKeysObj(): KeyboardModifierKeysState {
+function getModifierKeysState(): KeyboardModifierKeysState {
+  const leftAlt = Boolean(heldKeys.get(Key.LEFT_ALT));
+  const leftControl = Boolean(heldKeys.get(Key.LEFT_CONTROL));
+  const leftShift = Boolean(heldKeys.get(Key.LEFT_SHIFT));
+  const leftSuper = Boolean(heldKeys.get(Key.LEFT_SUPER));
+
+  const rightAlt = Boolean(heldKeys.get(Key.RIGHT_ALT));
+  const rightControl = Boolean(heldKeys.get(Key.RIGHT_CONTROL));
+  const rightShift = Boolean(heldKeys.get(Key.RIGHT_SHIFT));
+  const rightSuper = Boolean(heldKeys.get(Key.RIGHT_SUPER));
+
+  const alt = leftAlt || rightAlt;
+  const control = leftControl || rightControl;
+  const shift = leftShift || rightShift;
+  const super_ = leftSuper || rightSuper;
+
   return {
-    alt: modifierKeyState[Key.LEFT_ALT] || modifierKeyState[Key.RIGHT_ALT],
-    control:
-      modifierKeyState[Key.LEFT_CONTROL] || modifierKeyState[Key.RIGHT_CONTROL],
-    shift:
-      modifierKeyState[Key.LEFT_SHIFT] || modifierKeyState[Key.RIGHT_SHIFT],
-    super:
-      modifierKeyState[Key.LEFT_SUPER] || modifierKeyState[Key.RIGHT_SUPER],
-    windows:
-      modifierKeyState[Key.LEFT_WINDOWS] || modifierKeyState[Key.RIGHT_WINDOWS],
-    command:
-      modifierKeyState[Key.LEFT_COMMAND] || modifierKeyState[Key.RIGHT_COMMAND],
-    meta: modifierKeyState[Key.LEFT_META] || modifierKeyState[Key.RIGHT_META],
+    alt,
+    control,
+    shift,
+    super: super_,
+    windows: super_,
+    command: super_,
+    meta: super_,
 
-    leftAlt: modifierKeyState[Key.LEFT_ALT],
-    leftControl: modifierKeyState[Key.LEFT_CONTROL],
-    leftShift: modifierKeyState[Key.LEFT_SHIFT],
-    leftSuper: modifierKeyState[Key.LEFT_SUPER],
-    leftWindows: modifierKeyState[Key.LEFT_WINDOWS],
-    leftCommand: modifierKeyState[Key.LEFT_COMMAND],
-    leftMeta: modifierKeyState[Key.LEFT_META],
+    leftAlt,
+    leftControl,
+    leftShift,
+    leftSuper,
+    leftWindows: leftSuper,
+    leftCommand: leftSuper,
+    leftMeta: leftSuper,
 
-    rightAlt: modifierKeyState[Key.RIGHT_ALT],
-    rightControl: modifierKeyState[Key.RIGHT_CONTROL],
-    rightShift: modifierKeyState[Key.RIGHT_SHIFT],
-    rightSuper: modifierKeyState[Key.RIGHT_SUPER],
-    rightWindows: modifierKeyState[Key.RIGHT_WINDOWS],
-    rightCommand: modifierKeyState[Key.RIGHT_COMMAND],
-    rightMeta: modifierKeyState[Key.RIGHT_META],
+    rightAlt,
+    rightControl,
+    rightShift,
+    rightSuper,
+    rightWindows: rightSuper,
+    rightCommand: rightSuper,
+    rightMeta: rightSuper,
   };
 }
 
@@ -95,7 +90,7 @@ export class KeyboardEvent {
     this.type = type;
     this.key = key;
     this[IS_KEYBOARD_EVENT] = true;
-    this.modifierKeys = makeModifierKeysObj();
+    this.modifierKeys = getModifierKeysState();
   }
 }
 
@@ -243,9 +238,7 @@ uIOhook.on("keydown", (event) => {
     return;
   }
 
-  if (modifierKeysToTrack.has(key)) {
-    modifierKeyState[key] = true;
-  }
+  heldKeys.set(key, true);
 
   const newEvent = new KeyboardEvent("down", key);
   events.emit("keydown", newEvent);
@@ -261,9 +254,7 @@ uIOhook.on("keyup", (event) => {
     return;
   }
 
-  if (modifierKeysToTrack.has(key)) {
-    modifierKeyState[key] = false;
-  }
+  heldKeys.set(key, false);
 
   const newEvent = new KeyboardEvent("up", key);
   events.emit("keyup", newEvent);
@@ -299,5 +290,31 @@ export const Keyboard = {
         events.off("keyup", callback);
       },
     };
+  },
+
+  isDown(key: Key): boolean {
+    if (key === Key.ANY) {
+      for (const [_key, isDown] of heldKeys) {
+        if (isDown) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return Boolean(heldKeys.get(key));
+    }
+  },
+
+  isUp(key: Key): boolean {
+    if (key === Key.ANY) {
+      for (const [_key, isDown] of heldKeys) {
+        if (!isDown) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return !heldKeys.get(key);
+    }
   },
 };
