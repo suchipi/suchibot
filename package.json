@@ -19,6 +19,7 @@
     "automated"
   ],
   "author": "Lily Skye <me@suchipi.com>",
+  "repository": "suchipi/suchibot",
   "license": "MIT",
   "dependencies": {
     "@nut-tree/libnut": "^2.5.1",
