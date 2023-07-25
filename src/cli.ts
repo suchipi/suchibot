@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import kleur from "kleur";
 import { formatError } from "pretty-print-error";
+import { loadFile } from "./load-file";
 
 // @ts-ignore
 import pkgJson from "../package.json";
@@ -79,7 +80,7 @@ function main(suchibot: typeof import("./index")) {
   });
 
   try {
-    require(modulePath);
+    loadFile(modulePath);
   } catch (err: any) {
     console.log(kleur.red("An error occurred in your script:"));
     console.log(formatError(err));
