@@ -183,7 +183,7 @@ See the [examples folder](https://github.com/suchipi/suchibot/tree/main/examples
 
 ## Full API Documentation
 
-The "suchibot" module has 11 named exports. Each is documented here.
+The "suchibot" module has 17 named exports. Each is documented here.
 
 ### Mouse
 
@@ -451,6 +451,40 @@ Mouse.onMove((event) => {
 });
 ```
 
+#### Mouse.isDown
+
+Returns whether the specified mouse button is currently being held down, either by user input or suchibot.
+
+Definition:
+
+```ts
+function isDown(button: MouseButton): boolean;
+```
+
+Example:
+
+```js
+const isRightClickHeld = Mouse.isDown(MouseButton.RIGHT);
+console.log(isRightClickHeld); // true or false
+```
+
+#### Mouse.isUp
+
+Returns whether the specified mouse button is currently NOT being held down. Mouse buttons can be released either by user input or by suchibot.
+
+Definition:
+
+```ts
+function isUp(button: MouseButton): boolean;
+```
+
+Example:
+
+```js
+const isLeftClickReleased = Mouse.isUp(MouseButton.LEFT);
+console.log(isLeftClickReleased); // true or false
+```
+
 ### Keyboard
 
 Functions that let you control the keyboard and/or register code to be run when a keyboard event occurs.
@@ -595,6 +629,40 @@ Keyboard.onUp(Key.B, () => {
 Keyboard.onUp(Key.ANY, (event) => {
   console.log("someone released:", event.key);
 });
+```
+
+#### Keyboard.isDown
+
+Returns whether the specified key is currently being pressed, either by user input or suchibot.
+
+Definition:
+
+```ts
+function isDown(key: Key): boolean;
+```
+
+Example:
+
+```js
+const isSpaceHeld = Keyboard.isDown(Key.SPACE);
+console.log(isSpaceHeld); // true or false
+```
+
+#### Keyboard.isUp
+
+Returns whether the specified key is currently NOT being pressed. Keys can be released either by user input or by suchibot.
+
+Definition:
+
+```ts
+function isUp(key: Key): boolean;
+```
+
+Example:
+
+```js
+const isEscapeReleased = Keyboard.isDown(Key.ESCAPE);
+console.log(isEscapeReleased); // true or false
 ```
 
 ### Screen
@@ -781,6 +849,14 @@ Each `KeyboardEvent` has these properties on it:
 
 - `type`: A string indicating which kind of event this KeyboardEvent represents; could be either "down" or "up".
 - `key`: A string from `Key` indicating which keyboard key this event pertains to.
+
+### isKeyboardEvent
+
+A function which returns whether its argument is a `KeyboardEvent` object.
+
+### isMouseEvent
+
+A function which returns whether its argument is a `MouseEvent` object.
 
 ### startListening
 
