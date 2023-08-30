@@ -62,8 +62,6 @@ const events: Emitter<{
   mouseup: MouseEvent;
   mousemove: MouseEvent;
   click: MouseEvent;
-  keydown: KeyboardEvent;
-  keyup: KeyboardEvent;
 }> = mitt();
 
 uIOhook.on("click", (event) => {
