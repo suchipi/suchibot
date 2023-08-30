@@ -1,5 +1,12 @@
 #!/usr/bin/env suchibot
-import { Keyboard, Key, Mouse, MouseButton } from "./index";
+import { Keyboard, Key, Mouse, MouseButton, stopListening } from "suchibot";
+
+console.log("hi mom");
+
+setTimeout(() => {
+  console.log("stopListening");
+  stopListening();
+}, 2000);
 
 Keyboard.onDown(Key.A, (event) => {
   if (Keyboard.isDown(Key.LEFT_SHIFT)) {

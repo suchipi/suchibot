@@ -27,7 +27,7 @@
     "@nut-tree/libnut": "^2.5.1",
     "@suchipi/defer": "^1.0.0",
     "a-mimir": "^1.0.1",
-    "kame": "^0.9.2",
+    "kame": "^0.10.0",
     "kleur": "^4.1.4",
     "mitt": "^3.0.0",
     "pretty-print-error": "^1.1.1",
