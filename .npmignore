@@ -1,6 +1,6 @@
 node_modules
 .gitignore
 examples
-script.js
+script.ts
 src
 **/*.test.*

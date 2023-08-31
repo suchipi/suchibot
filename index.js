@@ -3,8 +3,9 @@ const suchibot = require("./dist/index");
 module.exports = suchibot;
 
 if (module === require.main) {
-  const { setCache } = require("./dist/load-file");
-  setCache(__filename, module);
+  // sets up esbuild-register, and forces require.resolve to always resolve suchibot to the current file
+  const { patchCjs } = require("./dist/patch-cjs");
+  patchCjs();
 
   const { main } = require("./dist/cli");
   Object.assign(globalThis, suchibot);

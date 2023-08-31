@@ -1,6 +1,10 @@
 #!/usr/bin/env suchibot
 import { Keyboard, Key, Mouse, MouseButton, stopListening } from "suchibot";
 
+function something(): string {
+  return "hi";
+}
+
 console.log("hi mom");
 
 setTimeout(() => {
