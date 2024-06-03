@@ -4,7 +4,7 @@ A cross-platform AutoHotKey-like thing with JavaScript/TypeScript as its scripti
 
 ## Installation
 
-First, you'll need [node.js](https://nodejs.org/en/download/) installed. Suchibot should work with most versions of Node, but for best compatibility, you can install [version 14](https://nodejs.org/dist/latest-fermium/), which is what it was tested against.
+First, you'll need [node.js](https://nodejs.org/en/download/) installed. Suchibot should work with most versions of Node, but for best compatibility, you can install [version 18](https://nodejs.org/dist/latest-hydrogen/), which is what it was tested against.
 
 On Windows, you'll also need to install the [Microsoft Visual C++ Redistributable](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads).
 
@@ -23,6 +23,8 @@ On macOS, you also need XCode command-line tools. You can get that by running th
 ```
 xcode-select --install
 ```
+
+> NOTE: Nowadays in macOS, you'll also need to grant some permissions to suchibot to allow it to monitor and simulate input, but I haven't figured out how to get that working yet \:\(
 
 Then, to install suchibot itself:
 
@@ -167,7 +169,7 @@ const tape = new Tape();
 // Start the recording...
 tape.record();
 
-// We'll take a 4-second recording by waiting 4000ms before calling `stop`.
+// We'll take a 4-second recording by waiting 4000ms before calling `stopRecording`.
 await sleep.async(4000);
 
 // Move the mouse around, press keys, etc.
