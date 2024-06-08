@@ -1,4 +1,4 @@
-import * as libnut from "@nut-tree/libnut";
+import * as libnut from "./libnut";
 
 export const Screen = {
   getSize(): { width: number; height: number } {

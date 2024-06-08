@@ -1,5 +1,5 @@
 import { MouseButton } from "../types";
-import * as libnut from "@nut-tree/libnut";
+import * as libnut from "../libnut";
 import { sleep } from "a-mimir";
 
 const mouseButtonToNutMap: {

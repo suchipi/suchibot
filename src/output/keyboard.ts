@@ -1,5 +1,5 @@
 import { Key } from "../types";
-import * as libnut from "@nut-tree/libnut";
+import * as libnut from "../libnut";
 import { sleep } from "a-mimir";
 
 const keyToNutMap: { [key in keyof typeof Key]: string | null } = {
