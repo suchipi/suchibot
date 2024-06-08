@@ -5,7 +5,7 @@
   "main": "index.js",
   "bin": "index.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && cp src/libnut.js dist/",
     "start": "node ./index.js",
     "test": "vitest"
   },
