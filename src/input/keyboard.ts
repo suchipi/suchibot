@@ -9,6 +9,11 @@ import {
   getModifierKeysState,
 } from "./held-keys";
 import { MouseButtonsState, getMouseButtonsState } from "./held-mouse-buttons";
+import makeDebug from "debug";
+
+const debug = makeDebug("suchibot:input/keyboard");
+const eventsDebug = makeDebug("suchibot:input/keyboard/events");
+const uIOhookEventsDebug = makeDebug("suchibot:input/keyboard/events/uiohook");
 
 // ------------ keyboard stuff -------------
 const IS_KEYBOARD_EVENT = Symbol("IS_KEYBOARD_EVENT");
@@ -172,7 +177,15 @@ const events: Emitter<{
   keyup: KeyboardEvent;
 }> = mitt();
 
+if (eventsDebug.enabled) {
+  events.on("*", (type, event) => {
+    eventsDebug("event emitted: %s %o", type, event);
+  });
+}
+
 uIOhook.on("keydown", (event) => {
+  uIOhookEventsDebug("uIOhook keydown event: %o", event);
+
   const key = uioToKey(event.keycode);
   if (!key) {
     console.warn(
@@ -189,6 +202,8 @@ uIOhook.on("keydown", (event) => {
 });
 
 uIOhook.on("keyup", (event) => {
+  uIOhookEventsDebug("uIOhook keyup event: %o", event);
+
   const key = uioToKey(event.keycode);
   if (!key) {
     console.warn(
@@ -207,6 +222,8 @@ uIOhook.on("keyup", (event) => {
 // ------------ public API -------------
 export const Keyboard = {
   onDown(key: Key, eventHandler: (event: KeyboardEvent) => void): Listener {
+    debug("Keyboard.onDown called: %s, %o", key, eventHandler);
+
     const callback = (event) => {
       if (key === Key.ANY || event.key === key) {
         eventHandler(event);
@@ -216,12 +233,15 @@ export const Keyboard = {
     events.on("keydown", callback);
     return {
       stop() {
+        debug("Keyboard.onDown(%s, ...).stop called", key);
         events.off("keydown", callback);
       },
     };
   },
 
   onUp(key: Key, eventHandler: (event: KeyboardEvent) => void): Listener {
+    debug("Keyboard.onUp called: %s, %o", key, eventHandler);
+
     const callback = (event) => {
       if (key === Key.ANY || event.key === key) {
         eventHandler(event);
@@ -231,16 +251,21 @@ export const Keyboard = {
     events.on("keyup", callback);
     return {
       stop() {
+        debug("Keyboard.onUp(%s, ...).stop called", key);
         events.off("keyup", callback);
       },
     };
   },
 
   isDown(key: Key): boolean {
-    return isKeyDown(key);
+    const result = isKeyDown(key);
+    debug("Keyboard.isDown(%s) -> %o", key, result);
+    return result;
   },
 
   isUp(key: Key): boolean {
-    return isKeyUp(key);
+    const result = isKeyUp(key);
+    debug("Keyboard.isUp(%s) -> %o", key, result);
+    return result;
   },
 };

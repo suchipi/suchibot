@@ -9,6 +9,11 @@ import {
   getMouseButtonsState,
   MouseButtonsState,
 } from "./held-mouse-buttons";
+import makeDebug from "debug";
+
+const debug = makeDebug("suchibot:input/mouse");
+const eventsDebug = makeDebug("suchibot:input/mouse/events");
+const uIOhookEventsDebug = makeDebug("suchibot:input/mouse/events/uiohook");
 
 // ------------ mouse stuff -------------
 const IS_MOUSE_EVENT = Symbol("IS_MOUSE_EVENT");
@@ -64,7 +69,15 @@ const events: Emitter<{
   click: MouseEvent;
 }> = mitt();
 
+if (eventsDebug.enabled) {
+  events.on("*", (type, event) => {
+    eventsDebug("event emitted: %s %o", type, event);
+  });
+}
+
 uIOhook.on("click", (event) => {
+  uIOhookEventsDebug("uIOhook click event: %o", event);
+
   const button = uioToMouseButton(event.button as number);
   if (!button) {
     console.warn(
@@ -81,6 +94,8 @@ uIOhook.on("click", (event) => {
 });
 
 uIOhook.on("mousedown", (event) => {
+  uIOhookEventsDebug("uIOhook mousedown event: %o", event);
+
   const button = uioToMouseButton(event.button as number);
   if (!button) {
     console.warn(
@@ -97,6 +112,8 @@ uIOhook.on("mousedown", (event) => {
 });
 
 uIOhook.on("mouseup", (event) => {
+  uIOhookEventsDebug("uIOhook mouseup event: %o", event);
+
   const button = uioToMouseButton(event.button as number);
   if (!button) {
     console.warn(
@@ -113,6 +130,8 @@ uIOhook.on("mouseup", (event) => {
 });
 
 uIOhook.on("mousemove", (event) => {
+  uIOhookEventsDebug("uIOhook mousemove event: %o", event);
+
   const newEvent = new MouseEvent("move", null, event.x, event.y);
   events.emit("mousemove", newEvent);
 });
@@ -123,6 +142,8 @@ export const Mouse = {
     button: MouseButton,
     eventHandler: (event: MouseEvent) => void
   ): Listener {
+    debug("Mouse.onDown called: %s, %o", button, eventHandler);
+
     const callback = (event: MouseEvent) => {
       if (
         String(event.button) === String(button) ||
@@ -134,6 +155,7 @@ export const Mouse = {
     events.on("mousedown", callback);
     return {
       stop() {
+        debug("Mouse.onDown(%s, ...).stop called", button);
         events.off("mousedown", callback);
       },
     };
@@ -142,6 +164,8 @@ export const Mouse = {
     button: MouseButton,
     eventHandler: (event: MouseEvent) => void
   ): Listener {
+    debug("Mouse.onUp called: %s, %o", button, eventHandler);
+
     const callback = (event: MouseEvent) => {
       if (
         String(event.button) === String(button) ||
@@ -153,6 +177,7 @@ export const Mouse = {
     events.on("mouseup", callback);
     return {
       stop() {
+        debug("Mouse.onUp(%s, ...).stop called", button);
         events.off("mouseup", callback);
       },
     };
@@ -161,6 +186,8 @@ export const Mouse = {
     button: MouseButton,
     eventHandler: (event: MouseEvent) => void
   ): Listener {
+    debug("Mouse.onClick called: %s, %o", button, eventHandler);
+
     const callback = (event: MouseEvent) => {
       if (
         String(event.button) === String(button) ||
@@ -172,27 +199,35 @@ export const Mouse = {
     events.on("click", callback);
     return {
       stop() {
+        debug("Mouse.onClick(%s, ...).stop called", button);
         events.off("click", callback);
       },
     };
   },
   onMove(eventHandler: (event: MouseEvent) => void): Listener {
+    debug("Mouse.onMove called: %o", eventHandler);
+
     const callback = (event: MouseEvent) => {
       eventHandler(event);
     };
     events.on("mousemove", callback);
     return {
       stop() {
+        debug("Mouse.onMove().stop called");
         events.off("mousemove", callback);
       },
     };
   },
 
   isDown(button: MouseButton) {
-    return isButtonDown(button);
+    const result = isButtonDown(button);
+    debug("Mouse.isDown(%s) -> %o", button, result);
+    return result;
   },
 
   isUp(button: MouseButton) {
-    return isButtonUp(button);
+    const result = isButtonUp(button);
+    debug("Mouse.isUp(%s) -> %o", button, result);
+    return result;
   },
 };

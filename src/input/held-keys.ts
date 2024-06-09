@@ -1,4 +1,7 @@
 import { Key } from "../types";
+import makeDebug from "debug";
+
+const debug = makeDebug("suchibot:input/held-keys");
 
 const heldKeys = new Map<Key, boolean>();
 
@@ -6,6 +9,7 @@ export function setKeyState(key: Key, upOrDown: "up" | "down") {
   if (key === Key.ANY) {
     return;
   }
+  debug("setting held key state: %s -> %s", key, upOrDown);
   heldKeys.set(key, upOrDown === "down");
 }
 
@@ -13,12 +17,16 @@ export function isKeyDown(key: Key): boolean {
   if (key === Key.ANY) {
     for (const [_key, isDown] of heldKeys) {
       if (isDown) {
+        debug("isKeyDown(ANY) -> true");
         return true;
       }
     }
+    debug("isKeyDown(ANY) -> false");
     return false;
   } else {
-    return Boolean(heldKeys.get(key));
+    const result = Boolean(heldKeys.get(key));
+    debug("isKeyDown(%s) -> %o", key, result);
+    return result;
   }
 }
 
@@ -26,12 +34,16 @@ export function isKeyUp(key: Key): boolean {
   if (key === Key.ANY) {
     for (const [_key, isDown] of heldKeys) {
       if (!isDown) {
+        debug("isKeyUp(ANY) -> true");
         return true;
       }
     }
+    debug("isKeyUp(ANY) -> false");
     return false;
   } else {
-    return !heldKeys.get(key);
+    const result = !heldKeys.get(key);
+    debug("isKeyUp(%s) -> %o", key, result);
+    return result;
   }
 }
 
@@ -77,7 +89,7 @@ export function getModifierKeysState(): KeyboardModifierKeysState {
   const shift = leftShift || rightShift;
   const super_ = leftSuper || rightSuper;
 
-  return {
+  const result = {
     alt,
     control,
     shift,
@@ -102,4 +114,7 @@ export function getModifierKeysState(): KeyboardModifierKeysState {
     rightCommand: rightSuper,
     rightMeta: rightSuper,
   };
+
+  debug("getModifierKeysState() -> %o", result);
+  return result;
 }

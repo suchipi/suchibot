@@ -1,6 +1,10 @@
 import { Key } from "../types";
 import * as libnut from "../libnut";
 import { sleep } from "a-mimir";
+import makeDebug from "debug";
+
+const debug = makeDebug("suchibot:output/keyboard");
+const libNutDebug = makeDebug("suchibot:output/keyboard/libnut");
 
 const keyToNutMap: { [key in keyof typeof Key]: string | null } = {
   BACKSPACE: "backspace",
@@ -159,25 +163,39 @@ function keyToNut(key: Key): string {
 
 export const Keyboard = {
   tap(key: Key) {
+    debug("Keyboard.tap(%s)", key);
     const nutKey = keyToNut(key);
 
+    libNutDebug("libnut.keyToggle(%s, down)", nutKey);
     libnut.keyToggle(nutKey, "down");
     sleep.sync(10);
+    libNutDebug("libnut.keyToggle(%s, up)", nutKey);
     libnut.keyToggle(nutKey, "up");
   },
 
   hold(key: Key) {
+    debug("Keyboard.hold(%s)", key);
     const nutKey = keyToNut(key);
+    libNutDebug("libnut.keyToggle(%s, down)", nutKey);
     libnut.keyToggle(nutKey, "down");
   },
 
   release(key: Key) {
+    debug("Keyboard.release(%s)", key);
     const nutKey = keyToNut(key);
+    libNutDebug("libnut.keyToggle(%s, up)", nutKey);
     libnut.keyToggle(nutKey, "up");
   },
 
   type(textToType: string, delayBetweenKeyPresses: number = 10) {
+    debug(
+      "Keyboard.type(%s, %d)",
+      JSON.stringify(textToType),
+      delayBetweenKeyPresses
+    );
+
     textToType.split("").forEach((char, index, all) => {
+      libNutDebug("libnut.typeString(%s)", char);
       libnut.typeString(char);
       if (index != all.length - 1) {
         sleep.sync(delayBetweenKeyPresses);
