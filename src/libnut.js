@@ -8,6 +8,8 @@ switch (process.platform) {
     break;
   }
   case "darwin": {
+    require("./mac-permissions").requestPermissions();
+
     module.exports = require("@suchipi/libnut-darwin");
     break;
   }

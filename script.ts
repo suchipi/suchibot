@@ -7,10 +7,10 @@ function something(): string {
 
 console.log("hi mom");
 
-setTimeout(() => {
-  console.log("stopListening");
-  stopListening();
-}, 2000);
+// setTimeout(() => {
+//   console.log("stopListening");
+//   stopListening();
+// }, 2000);
 
 Keyboard.onDown(Key.A, (event) => {
   if (Keyboard.isDown(Key.LEFT_SHIFT)) {
