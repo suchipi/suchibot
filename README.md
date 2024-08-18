@@ -24,7 +24,11 @@ On macOS, you also need XCode command-line tools. You can get that by running th
 xcode-select --install
 ```
 
-> NOTE: Nowadays in macOS, you'll also need to grant some permissions to suchibot to allow it to monitor and simulate input, but I haven't figured out how to get that working yet \:\(
+> NOTE: Nowadays in macOS, apps need permissions in order to monitor and simulate input. suchibot will automatically request them the first time it's run, but be aware that permission requesting is broken on macOS if you have System Integrity Protection disabled.
+>
+> You can run with env var "DEBUG" set to `suchibot:mac-permissions` to see log output relating to the permission requests.
+>
+> That said, it seems things aren't working reliably on macOS... I need to investigate this later...
 
 Then, to install suchibot itself:
 
