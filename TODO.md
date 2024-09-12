@@ -1,1 +1,2 @@
 - [ ] add numpad keys (windows reports keycodes up near 60000)
+- [ ] get working in node 20 and 22 on windows
