@@ -2,6 +2,7 @@ import makeDebug from "debug";
 const debug = makeDebug("suchibot:mac-permissions");
 
 export async function requestPermissions() {
+  // @ts-ignore not present on non-mac
   const permissions: typeof import("@suchipi/node-mac-permissions") = require("@suchipi/node-mac-permissions");
 
   const inputMonitoringPermission =
