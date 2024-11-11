@@ -12,11 +12,11 @@ If you're running Windows 10 N, you'll also need to install the [Media Feature P
 
 On Linux, you also need libXtst. You can get that on Ubuntu-based distros by running this in a terminal:
 
-> NOTE: I haven't tested suchibot in wayland, only Xorg. It probably doesn't work in wayland.
-
 ```
 sudo apt install build-essential libxtst-dev
 ```
+
+> NOTE: I haven't tested suchibot in wayland, only Xorg. It probably doesn't work in wayland.
 
 On macOS, you also need XCode command-line tools. You can get that by running this in a terminal:
 
